@@ -1,6 +1,4 @@
-
-
-
-
-
-        # ...existing code...        print("Routing request through proxy")        # Use proxy API to route request    def route_request(self, request):class ProxyAgent:
+class ProxyAgent:
+    def route_request(self, request):
+        print("Routing request through proxy")
+        # Use proxy API to route request
