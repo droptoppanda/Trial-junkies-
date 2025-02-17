@@ -6,13 +6,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 
 class FormFillerScraperAgent:
-    def __init__(self, scraping_api_key):
+    def __init__(self, scraping_api_key, webdriver_path):
         self.scraping_api_key = scraping_api_key
+        self.webdriver_path = webdriver_path
 
     def scrape_form_fields(self, url):
         try:
             # Initialize Selenium WebDriver (Chrome example)
-            driver = webdriver.Chrome(service=Service('/path/to/chromedriver'))
+            driver = webdriver.Chrome(service=Service(self.webdriver_path))
             driver.get(url)
 
             # Wait for the form or search results to load (adjust timeout as needed)

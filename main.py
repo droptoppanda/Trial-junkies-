@@ -7,13 +7,20 @@ from form_filler_scraper_agent import FormFillerScraperAgent
 from verification_agent import VerificationAgent
 from proxy_agent import ProxyAgent
 
+# Add missing imports
+from solana_pay import SolanaPay
+from role_management import RoleManager
+from discord_bot import TrialBot
+
 def main():
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     platform = "Platform A"
+    webdriver_path = "/path/to/chromedriver"
     trial_request_agent = TrialRequestAgent(platform)
     credential_generation_agent = CredentialGenerationAgent()
     profile_generation_agent = ProfileGenerationAgent()
-    trial_execution_agent = TrialExecutionAgent(platform_url="https://platform-a.com/signup")
-    form_filler_scraper_agent = FormFillerScraperAgent(scraping_api_key="your_scraping_api_key")
+    trial_execution_agent = TrialExecutionAgent(platform_url="https://platform-a.com/signup", webdriver_path=webdriver_path)
+    form_filler_scraper_agent = FormFillerScraperAgent(scraping_api_key="your_scraping_api_key", webdriver_path=webdriver_path)
     verification_agent = VerificationAgent()
     proxy_agent = ProxyAgent()
 
