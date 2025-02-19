@@ -12,11 +12,17 @@ class CredentialGenerationAgent:
         self.card_api_key = os.getenv('FAKE_VALID_CC_DATA_GENERATOR_API_KEY')
         
     def generate_email(self):
-        url = "https://api.namefake.com/english-united-states/random"
-        response = requests.get(url)
-        if response.status_code == 200:
-            return response.json().get("email")
-        return None
+        try:
+            url = "https://api.namefake.com/english-united-states/random"
+            response = requests.get(url, timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                return data.get("email")
+            print(f"API Error: Status {response.status_code}")
+            return None
+        except Exception as e:
+            print(f"Email generation failed: {str(e)}")
+            return None
 
     def generate_phone(self):
         url = "https://virtual-number.p.rapidapi.com/api/v1/e-sim/country-numbers"
