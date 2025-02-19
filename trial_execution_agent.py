@@ -13,7 +13,7 @@ class TrialExecutionAgent:
         self.webdriver_path = webdriver_path
         logging.basicConfig(level=logging.INFO)
 
-    def execute_trial(self, profile, form_fields, discord_user_id=None):
+    def execute_trial(self, profile, form_fields, discord_user_id=None, payment_required=False):
         driver = None
         try:
             # Validate inputs
@@ -28,6 +28,25 @@ class TrialExecutionAgent:
                     raise ValueError("Active subscription required for trial creation")
                 if sub_details.get('trials_remaining', 0) <= 0:
                     raise ValueError("No trials remaining in current subscription")
+                    
+            # Verify payment if required
+            if payment_required:
+                from solana_pay import SolanaPay
+                import os
+                
+                solana_pay = SolanaPay(
+                    os.getenv('SOLANA_ENDPOINT'),
+                    os.getenv('WALLET_KEYPAIR')
+                )
+                
+                payment_status, message = solana_pay.process_payment(float(os.getenv('TRIAL_PAYMENT_AMOUNT', '0.1')))
+                if not payment_status:
+                    raise ValueError(f"Payment verification failed: {message}")
+                    
+            # Verify trial eligibility
+            from verification_agent import VerificationAgent
+            verification_agent = VerificationAgent()
+            verification_agent.verify_trial_creation(profile)
             if not form_fields or not isinstance(form_fields, dict):
                 raise ValueError("Invalid form fields")
                 
