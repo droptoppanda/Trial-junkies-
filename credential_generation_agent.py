@@ -27,7 +27,7 @@ class CredentialGenerationAgent:
         params = {"countryId": "1"}
         response = requests.get(url, headers=headers, params=params)
         if response.status_code == 200:
-            return response.json().get("number")
+            return response.json().get("phone")
         return None
 
     def generate_card(self):
@@ -38,5 +38,5 @@ class CredentialGenerationAgent:
         }
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
-            return response.json()
+            return response.json().get("card_number")
         return None
