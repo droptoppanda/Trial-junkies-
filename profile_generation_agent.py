@@ -21,8 +21,9 @@ class ProfileGenerationAgent:
         phone = credential_agent.generate_phone()
         card = credential_agent.generate_card()
 
-        if person_data and email and phone and card:
-            return {
+        # Return mock data if all required fields are present
+        if all([person_data, email, phone, card]):
+            profile = {
                 "name": person_data['name'],
                 "address": person_data['address'],
                 "email": email,

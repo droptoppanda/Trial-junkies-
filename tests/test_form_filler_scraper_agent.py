@@ -19,8 +19,8 @@ class TestFormFillerScraperAgent(unittest.TestCase):
         mock_form.find_elements.return_value = [mock_input]
         mock_driver.find_element.return_value = mock_form
         mock_wait.return_value.until.return_value = mock_form
-        
         mock_chrome.return_value = mock_driver
+        mock_driver.quit.side_effect = None
         
         form_fields = self.agent.scrape_form_fields("http://example.com")
         self.assertIsNotNone(form_fields)
