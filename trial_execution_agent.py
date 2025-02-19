@@ -16,11 +16,25 @@ class TrialExecutionAgent:
     def execute_trial(self, profile, form_fields):
         driver = None
         try:
-            logging.info(f"Executing trial signup for {profile['name']}")
-
-            # Initialize Selenium WebDriver (Chrome example)
-            driver = webdriver.Chrome(service=Service(self.webdriver_path))
-            driver.get(self.platform_url)
+            # Validate inputs
+            if not profile or not isinstance(profile, dict):
+                raise ValueError("Invalid profile data")
+            if not form_fields or not isinstance(form_fields, dict):
+                raise ValueError("Invalid form fields")
+                
+            logging.info(f"Executing trial signup for {profile.get('name', 'Unknown')}")
+            
+            # Initialize WebDriver with retry logic
+            for attempt in range(3):
+                try:
+                    driver = webdriver.Chrome(service=Service(self.webdriver_path))
+                    driver.get(self.platform_url)
+                    break
+                except Exception as e:
+                    if attempt == 2:
+                        raise
+                    logging.warning(f"WebDriver initialization attempt {attempt + 1} failed: {e}")
+                    time.sleep(2)
 
             # Fill form fields
             for field, value in form_fields.items():

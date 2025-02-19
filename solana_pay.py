@@ -16,10 +16,30 @@ class SolanaPay:
     def process_payment(self, amount):
         try:
             balance = self.get_balance()
-            if balance.get('result', {}).get('value', 0) < amount:
+            balance_value = balance.get('result', {}).get('value', 0)
+            
+            if balance_value < amount:
                 return False, "Insufficient balance"
-            return True, "Payment processed"
+                
+            if amount <= 0:
+                return False, "Invalid payment amount"
+                
+            # Create and send transaction
+            recipient = self.keypair.public_key
+            transaction = self.create_payment(amount, recipient)
+            response = self.client.send_transaction(transaction, self.keypair)
+            
+            if not response or 'result' not in response:
+                return False, "Transaction failed"
+                
+            # Verify transaction
+            verification = self.verify_payment(response['result'])
+            if not verification:
+                return False, "Payment verification failed"
+                
+            return True, response['result']
         except Exception as e:
+            logging.error(f"Payment processing error: {str(e)}")
             return False, str(e)
 
     def create_payment(self, amount, recipient):

@@ -7,19 +7,32 @@ SUBSCRIPTION_VERIFY_URL = "https://api.example.com/verify_subscription"
 def verify_subscription(discord_user_id):
     """
     Verifies a user's subscription status based on their Discord user ID.
-    Returns True if active, False otherwise.
+    Returns (is_active, is_trial, subscription_details) tuple.
     """
     url = f"{SUBSCRIPTION_VERIFY_URL}?discord_id={discord_user_id}"
     headers = {"Authorization": f"Bearer {API_KEY_SUBSCRIPTION}"}
+    
     try:
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            data = response.json()
-            # Expecting a JSON response like { "is_active": true, "trial": true }
-            return data.get("is_active", False), data.get("trial", False)
-    except Exception as e:
-        print(f"Error verifying subscription: {e}")
-    return False, False
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        
+        data = response.json()
+        is_active = data.get("is_active", False)
+        is_trial = data.get("trial", False)
+        subscription_details = {
+            "plan": data.get("plan", ""),
+            "expiry": data.get("expiry", ""),
+            "trials_remaining": data.get("trials_remaining", 0)
+        }
+        
+        return is_active, is_trial, subscription_details
+        
+    except requests.Timeout:
+        logging.error("Subscription verification timeout")
+        return False, False, {}
+    except requests.RequestException as e:
+        logging.error(f"Subscription verification error: {str(e)}")
+        return False, False, {}
 
 # Example usage:
 if __name__ == "__main__":

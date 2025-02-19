@@ -47,12 +47,27 @@ def main():
             'card': card
         })
 
-        # Check for wallet connection
-        wallet_endpoint = os.getenv('SOLANA_ENDPOINT')
-        wallet_keypair = os.getenv('WALLET_KEYPAIR')
+        # Validate configuration
+        required_env_vars = {
+            'SOLANA_ENDPOINT': os.getenv('SOLANA_ENDPOINT'),
+            'WALLET_KEYPAIR': os.getenv('WALLET_KEYPAIR'),
+            'WEBDRIVER_PATH': os.getenv('WEBDRIVER_PATH'),
+            'API_KEY_SUBSCRIPTION': os.getenv('API_KEY_SUBSCRIPTION')
+        }
         
-        if not wallet_endpoint or not wallet_keypair:
-            raise ValueError("Wallet configuration missing. Please set SOLANA_ENDPOINT and WALLET_KEYPAIR in environment variables")
+        missing_vars = [k for k, v in required_env_vars.items() if not v]
+        if missing_vars:
+            raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
+            
+        # Initialize payment system
+        try:
+            solana_pay = SolanaPay(required_env_vars['SOLANA_ENDPOINT'], 
+                                 required_env_vars['WALLET_KEYPAIR'])
+            balance = solana_pay.get_balance()
+            if not balance or not balance.get('result', {}).get('value', 0):
+                raise ValueError("Unable to verify wallet balance")
+        except Exception as e:
+            raise ValueError(f"Payment system initialization failed: {str(e)}")
             
         # Initialize Solana Pay
         solana_pay = SolanaPay(wallet_endpoint, wallet_keypair)
