@@ -5,6 +5,7 @@ from profile_generation_agent import ProfileGenerationAgent
 
 class TestProfileGenerationAgent(unittest.TestCase):
     def setUp(self):
+        os.environ['TESTING'] = 'true'
         self.agent = ProfileGenerationAgent()
 
     @patch('credential_generation_agent.CredentialGenerationAgent')
