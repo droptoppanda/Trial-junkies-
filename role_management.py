@@ -1,4 +1,6 @@
 
+import discord
+
 class RoleManager:
     def __init__(self, guild):
         self.guild = guild
