@@ -1,33 +1,47 @@
 
 import os
-import http.client
+import requests
 import json
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
+logging.basicConfig(level=logging.INFO)
 
-def scrape_url(url):
-    conn = http.client.HTTPSConnection("scrapeninja.p.rapidapi.com")
-    
-    headers = {
-        'x-rapidapi-key': os.getenv('RAPIDAPI_KEY'),
-        'x-rapidapi-host': "scrapeninja.p.rapidapi.com",
-        'Content-Type': "application/json"
-    }
-    
-    payload = json.dumps({"url": url})
-    
-    try:
-        conn.request("POST", "/scrape", payload, headers)
-        res = conn.getresponse()
-        data = res.read()
-        return data.decode("utf-8")
-    except Exception as e:
-        print(f"Scraping failed: {str(e)}")
-        return None
-    finally:
-        conn.close()
+class ScrapingAgent:
+    def __init__(self):
+        self.api_key = os.getenv('RAPIDAPI_KEY')
+        self.headers = {
+            'x-rapidapi-key': self.api_key,
+            'x-rapidapi-host': "scrapeninja.p.rapidapi.com"
+        }
+
+    def scrape_url(self, url, use_proxy=True):
+        try:
+            payload = {
+                "url": url,
+                "useProxy": use_proxy,
+                "returnHtml": True
+            }
+            
+            response = requests.post(
+                "https://scrapeninja.p.rapidapi.com/scrape",
+                headers=self.headers,
+                json=payload,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                return response.json()
+            else:
+                logging.error(f"Scraping failed with status {response.status_code}")
+                return None
+                
+        except Exception as e:
+            logging.error(f"Scraping error: {str(e)}")
+            return None
 
 if __name__ == "__main__":
-    result = scrape_url("https://news.ycombinator.com/")
-    print(result)
+    scraper = ScrapingAgent()
+    result = scraper.scrape_url("https://example.com")
+    print(json.dumps(result, indent=2))

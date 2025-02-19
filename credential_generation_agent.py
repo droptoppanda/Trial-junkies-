@@ -15,10 +15,10 @@ class CredentialGenerationAgent:
         
     def generate_email(self):
         try:
-            url = "https://random-data-api.p.rapidapi.com/api/v2/users"
+            url = "https://privatix-temp-mail-v1.p.rapidapi.com/request/mail/id/12345/"
             headers = {
                 "X-RapidAPI-Key": os.getenv('RAPIDAPI_KEY'),
-                "X-RapidAPI-Host": "random-data-api.p.rapidapi.com"
+                "X-RapidAPI-Host": "privatix-temp-mail-v1.p.rapidapi.com"
             }
             response = requests.get(url, headers=headers, timeout=10)
             if response.status_code == 200:
