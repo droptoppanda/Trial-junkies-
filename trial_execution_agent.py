@@ -92,7 +92,10 @@ class TrialExecutionAgent:
 
         except Exception as e:
             logging.error(f"Selenium Error: {e}")
-            return "Signup failed"
+            return {
+                "status": "failed",
+                "error": str(e)
+            }
         
         finally:
             if driver:
