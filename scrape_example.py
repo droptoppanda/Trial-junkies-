@@ -10,7 +10,9 @@ logging.basicConfig(level=logging.INFO)
 
 class ScrapingAgent:
     def __init__(self):
-        self.api_key = os.getenv('RAPIDAPI_KEY')
+        self.api_key = os.getenv('SCRAPENINJA_API_KEY')
+        if not self.api_key:
+            raise ValueError("SCRAPENINJA_API_KEY not found in environment variables")
         self.headers = {
             'x-rapidapi-key': self.api_key,
             'x-rapidapi-host': "scrapeninja.p.rapidapi.com"
@@ -21,7 +23,8 @@ class ScrapingAgent:
             payload = {
                 "url": url,
                 "useProxy": use_proxy,
-                "returnHtml": True
+                "returnHtml": True,
+                "javascript": True
             }
             
             response = requests.post(
@@ -31,17 +34,17 @@ class ScrapingAgent:
                 timeout=30
             )
             
-            if response.status_code == 200:
-                return response.json()
-            else:
-                logging.error(f"Scraping failed with status {response.status_code}")
-                return None
+            response.raise_for_status()
+            return response.json()
                 
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
             logging.error(f"Scraping error: {str(e)}")
             return None
+        except Exception as e:
+            logging.error(f"Unexpected error: {str(e)}")
+            return None
 
-if __name__ == "__main__":
-    scraper = ScrapingAgent()
-    result = scraper.scrape_url("https://example.com")
-    print(json.dumps(result, indent=2))
+    def validate_response(self, response):
+        if not response or 'html' not in response:
+            return False
+        return True
