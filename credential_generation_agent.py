@@ -1,8 +1,8 @@
+
 import os
 import requests
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 class CredentialGenerationAgent:
@@ -10,40 +10,33 @@ class CredentialGenerationAgent:
         self.personator_api_key = os.getenv('PERSONATOR_API_KEY')
         self.virtual_number_api_key = os.getenv('VIRTUAL_NUMBER_API_KEY')
         self.card_api_key = os.getenv('FAKE_VALID_CC_DATA_GENERATOR_API_KEY')
-        self.personator_base_url = "https://personator2.p.rapidapi.com/v3/WEB/ContactVerify/doContactVerify"
-        self.virtual_number_base_url = "https://virtual-number.p.rapidapi.com/generate"
-        self.card_base_url = "https://fake-valid-cc-data-generator.api/endpoint/generate"  # Replace with actual endpoint
-        self.personator_headers = {
-            'x-rapidapi-host': 'personator2.p.rapidapi.com',
-            'x-rapidapi-key': self.personator_api_key
-        }
-        self.virtual_number_headers = {
-            'x-rapidapi-host': 'virtual-number.p.rapidapi.com',
-            'x-rapidapi-key': self.virtual_number_api_key
-        }
-        self.card_headers = {
-            'Authorization': f'Bearer {self.card_api_key}'
-        }
-
+        
     def generate_email(self):
-        params = {
-            'format': 'json',
-            'act': 'check,verify,append,move',
-            'email': 'test@example.com'  # Replace with actual email if needed
-        }
-        response = requests.get(self.personator_base_url, headers=self.personator_headers, params=params)
+        url = "https://api.namefake.com/english-united-states/random"
+        response = requests.get(url)
         if response.status_code == 200:
-            return response.json().get("Records", [{}])[0].get("EmailAddress", "generated_email@example.com")
-        return "generated_email@example.com"
+            return response.json().get("email")
+        return None
 
     def generate_phone(self):
-        response = requests.get(self.virtual_number_base_url, headers=self.virtual_number_headers)
+        url = "https://virtual-number.p.rapidapi.com/api/v1/e-sim/country-numbers"
+        headers = {
+            "X-RapidAPI-Key": self.virtual_number_api_key,
+            "X-RapidAPI-Host": "virtual-number.p.rapidapi.com"
+        }
+        params = {"countryId": "1"}
+        response = requests.get(url, headers=headers, params=params)
         if response.status_code == 200:
-            return response.json().get("phone", "123-456-7890")
-        return "123-456-7890"
+            return response.json().get("number")
+        return None
 
     def generate_card(self):
-        response = requests.get(self.card_base_url, headers=self.card_headers)
+        url = "https://fake-valid-cc-data-generator.p.rapidapi.com/card"
+        headers = {
+            "X-RapidAPI-Key": self.card_api_key,
+            "X-RapidAPI-Host": "fake-valid-cc-data-generator.p.rapidapi.com"
+        }
+        response = requests.get(url, headers=headers)
         if response.status_code == 200:
-            return response.json().get("card_number", "4111-1111-1111-1111")
-        return "4111-1111-1111-1111"
+            return response.json()
+        return None
