@@ -54,10 +54,7 @@ class CredentialGenerationAgent:
     def generate_phone(self):
         try:
             url = "https://virtual-number.p.rapidapi.com/api/v1/e-sim/country-numbers"
-            headers = {
-                "X-RapidAPI-Key": self.virtual_number_api_key,
-                "X-RapidAPI-Host": "virtual-number.p.rapidapi.com"
-            }
+            headers = self.api_manager.get_headers('virtual-number')
             params = {"countryId": "1"}
             response = requests.get(url, headers=headers, params=params, timeout=10)
             if response.status_code == 200:

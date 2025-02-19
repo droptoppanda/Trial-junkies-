@@ -31,7 +31,7 @@ class ProfileGenerationAgent:
                 "ssn": person_data['ssn'],
                 "dob": person_data['dob']
             }
-        if response.status_code == 200:
+        return self._get_fallback_profile()
             data = response.json()
             if 'results' in data and len(data['results']) > 0:
                 result = data['results'][0]
