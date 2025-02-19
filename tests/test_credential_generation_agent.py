@@ -3,7 +3,9 @@ from unittest.mock import patch
 from credential_generation_agent import CredentialGenerationAgent
 
 class TestCredentialGenerationAgent(unittest.TestCase):
-    def setUp(self):
+    @patch('credential_generation_agent.RapidAPIManager')
+def setUp(self, mock_api_manager):
+        mock_api_manager.return_value.get_headers.return_value = {}
         self.agent = CredentialGenerationAgent()
 
     @patch('credential_generation_agent.requests.get')
