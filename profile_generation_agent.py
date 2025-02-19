@@ -23,7 +23,7 @@ class ProfileGenerationAgent:
 
         # Return mock data if all required fields are present
         if all([person_data, email, phone, card]):
-            profile = {
+            return {
                 "name": person_data['name'],
                 "address": person_data['address'],
                 "email": email,
