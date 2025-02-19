@@ -55,7 +55,7 @@ async def start_trial(ctx, profile_name):
         verification_agent = VerificationAgent()
         verification_agent.verify_trial_creation(profile)
         trial_execution_agent = TrialExecutionAgent(platform_url="http://example.com", webdriver_path="/path/to/chromedriver")
-        result = trial_execution_agent.execute_trial(profile, form_fields)
+        result = trial_execution_agent.execute_trial(profile, form_fields, discord_user_id=str(ctx.author.id))
         await ctx.send(result)
     except ValueError as e:
         await ctx.send(str(e))

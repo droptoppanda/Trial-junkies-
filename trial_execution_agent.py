@@ -13,12 +13,21 @@ class TrialExecutionAgent:
         self.webdriver_path = webdriver_path
         logging.basicConfig(level=logging.INFO)
 
-    def execute_trial(self, profile, form_fields):
+    def execute_trial(self, profile, form_fields, discord_user_id=None):
         driver = None
         try:
             # Validate inputs
             if not profile or not isinstance(profile, dict):
                 raise ValueError("Invalid profile data")
+                
+            # Verify subscription if discord_user_id is provided
+            if discord_user_id:
+                from subscription_verification import verify_subscription
+                is_active, is_trial, sub_details = verify_subscription(discord_user_id)
+                if not is_active:
+                    raise ValueError("Active subscription required for trial creation")
+                if sub_details.get('trials_remaining', 0) <= 0:
+                    raise ValueError("No trials remaining in current subscription")
             if not form_fields or not isinstance(form_fields, dict):
                 raise ValueError("Invalid form fields")
                 
