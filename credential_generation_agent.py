@@ -9,17 +9,13 @@ logging.basicConfig(level=logging.INFO)
 
 class CredentialGenerationAgent:
     def __init__(self):
-        self.personator_api_key = os.getenv('RAPIDAPI_KEY')
-        self.virtual_number_api_key = os.getenv('VIRTUAL_NUMBER_API_KEY')
-        self.card_api_key = os.getenv('FAKE_VALID_CC_DATA_GENERATOR_API_KEY')
+        from rapid_api_manager import RapidAPIManager
+        self.api_manager = RapidAPIManager()
         
     def generate_person(self):
         try:
             url = "https://personator.p.rapidapi.com/generate"
-            headers = {
-                "X-RapidAPI-Key": self.personator_api_key,
-                "X-RapidAPI-Host": "personator.p.rapidapi.com"
-            }
+            headers = self.api_manager.get_headers('personator')
             response = requests.get(url, headers=headers, timeout=10)
             if response.status_code == 200:
                 data = response.json()
