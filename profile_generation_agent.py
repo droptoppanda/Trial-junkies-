@@ -21,10 +21,13 @@ class ProfileGenerationAgent:
         phone = credential_agent.generate_phone()
         card = credential_agent.generate_card()
 
-        if person_data and email and phone and card:
-            return {
-                "name": person_data['name'],
-                "address": person_data['address'],
+        if person_data is None or email is None or phone is None or card is None:
+            return self._get_fallback_profile()
+
+        # Only reach here if all data is valid
+        return {
+            "name": person_data['name'],
+            "address": person_data['address'],
                 "email": email,
                 "phone": phone,
                 "card": card,
