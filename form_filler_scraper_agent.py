@@ -50,7 +50,8 @@ class FormFillerScraperAgent:
             print(f"Error scraping form: {str(e)}")
             return None
         finally:
-            self.driver.quit()
+            if self.driver:
+                self.driver.quit()
 
     def fill_form(self, url, form_data):
         try:
@@ -70,4 +71,5 @@ class FormFillerScraperAgent:
             print(f"Error filling form: {str(e)}")
             return False
         finally:
-            self.driver.quit()
+            if self.driver:
+                self.driver.quit()
