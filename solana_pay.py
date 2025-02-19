@@ -8,7 +8,8 @@ import base58
 class SolanaPay:
     def __init__(self, endpoint, keypair_base58):
         self.client = Client(endpoint)
-        self.keypair = Keypair.from_secret_key(base58.b58decode(keypair_base58))
+        secret_key = base58.b58decode(keypair_base58)
+        self.keypair = Keypair.from_bytes(secret_key)
 
     def get_balance(self):
         return self.client.get_balance(self.keypair.public_key)

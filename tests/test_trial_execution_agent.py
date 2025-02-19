@@ -19,8 +19,7 @@ class TestTrialExecutionAgent(unittest.TestCase):
         mock_wait = MagicMock()
         mock_wait.until.return_value = mock_driver
         with patch('trial_execution_agent.WebDriverWait', return_value=mock_wait):
-
-        profile = {"name": "John Doe"}
+            profile = {"name": "John Doe"}
         form_fields = {"name": "John Doe"}
         result = self.agent.execute_trial(profile, form_fields)
         self.assertEqual(result["status"], "success")
