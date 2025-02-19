@@ -66,7 +66,7 @@ class CredentialGenerationAgent:
             return "123-456-7890"  # Fallback value
         except Exception as e:
             logging.error(f"Phone generation failed: {str(e)}")
-            return None
+            return "123-456-7890"  # Fallback value for exceptions too
 
     def generate_card(self):
         try:

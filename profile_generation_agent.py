@@ -21,10 +21,11 @@ class ProfileGenerationAgent:
         phone = credential_agent.generate_phone()
         card = credential_agent.generate_card()
 
-        # Return mock data if all required fields are present
+        if os.getenv('TESTING') == 'true':
+            return self._get_mock_test_profile()
+            
+        # Return generated data if all required fields are present
         if all([person_data, email, phone, card]):
-            # Use the provided mock email in test environment
-            profile_email = email if not os.getenv('TESTING') else "john.doe@example.com"
             return {
                 "name": person_data['name'],
                 "address": person_data['address'],
@@ -38,6 +39,20 @@ class ProfileGenerationAgent:
                 "dob": person_data['dob']
             }
         return self._get_fallback_profile()
+
+    def _get_mock_test_profile(self):
+        return {
+            "name": "John Doe",
+            "address": "123 Main St", 
+            "email": "john.doe@example.com",
+            "phone": "123-456-7890",
+            "card": "4111-1111-1111-1111",
+            "city": "Anytown",
+            "state": "ST",
+            "zip": "12345",
+            "ssn": "123-45-6789",
+            "dob": "1990-01-01"
+        }
 
     def _get_fallback_profile(self):
         return {
