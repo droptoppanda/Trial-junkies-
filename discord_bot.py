@@ -55,8 +55,26 @@ async def start_trial(ctx, profile_name):
         verification_agent = VerificationAgent()
         verification_agent.verify_trial_creation(profile)
         trial_execution_agent = TrialExecutionAgent(platform_url="http://example.com", webdriver_path="/path/to/chromedriver")
-        result = trial_execution_agent.execute_trial(profile, form_fields, discord_user_id=str(ctx.author.id))
-        await ctx.send(result)
+        trial_details = trial_execution_agent.execute_trial(profile, form_fields, discord_user_id=str(ctx.author.id))
+        
+        if trial_details and trial_details.get("status") == "success":
+            # Send public success message
+            await ctx.send("Trial created successfully! Check your DMs for details.")
+            
+            # Send private details
+            dm_message = (
+                f"🎉 Trial Creation Success!\n\n"
+                f"Profile: {trial_details['profile']['name']}\n"
+                f"Platform: {trial_details['platform_url']}\n"
+                f"Credentials: {trial_details['credentials']}\n"
+                f"Created: {trial_details['timestamp']}"
+            )
+            try:
+                await ctx.author.send(dm_message)
+            except discord.Forbidden:
+                await ctx.send("⚠️ Couldn't send DM. Please enable DMs from server members.")
+        else:
+            await ctx.send("❌ Trial creation failed.")
     except ValueError as e:
         await ctx.send(str(e))
 

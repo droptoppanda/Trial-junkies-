@@ -81,7 +81,14 @@ class TrialExecutionAgent:
             )
             form.submit()
 
-            return "Signup successful"
+            trial_details = {
+                "status": "success",
+                "profile": profile,
+                "credentials": form_fields,
+                "platform_url": self.platform_url,
+                "timestamp": datetime.datetime.now().isoformat()
+            }
+            return trial_details
 
         except Exception as e:
             logging.error(f"Selenium Error: {e}")
