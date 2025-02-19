@@ -17,7 +17,7 @@ def main():
     
     try:
         webdriver_path = os.getenv('WEBDRIVER_PATH')
-        trial_request_agent = TrialRequestAgent()
+        trial_request_agent = TrialRequestAgent(platform="default")
         credential_generation_agent = CredentialGenerationAgent()
         profile_generation_agent = ProfileGenerationAgent()
         trial_execution_agent = TrialExecutionAgent(webdriver_path=webdriver_path)
