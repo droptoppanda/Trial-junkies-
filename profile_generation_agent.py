@@ -17,14 +17,17 @@ class ProfileGenerationAgent:
     def generate_profile(self):
         credential_agent = CredentialGenerationAgent()
         person_data = credential_agent.generate_person()
+        email = credential_agent.generate_email()
+        phone = credential_agent.generate_phone()
+        card = credential_agent.generate_card()
 
-        if person_data:
+        if person_data and email and phone and card:
             return {
                 "name": person_data['name'],
                 "address": person_data['address'],
-                "email": credential_agent.generate_email(),
-                "phone": credential_agent.generate_phone(),
-                "card": credential_agent.generate_card(),
+                "email": email,
+                "phone": phone,
+                "card": card,
                 "city": person_data['city'],
                 "state": person_data['state'],
                 "zip": person_data['zip'],

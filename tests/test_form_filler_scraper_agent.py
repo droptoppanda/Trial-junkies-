@@ -17,10 +17,12 @@ class TestFormFillerScraperAgent(unittest.TestCase):
         mock_input.get_attribute.side_effect = lambda attr: "text" if attr == "type" else "name" if attr == "name" else None
         mock_form.find_elements.return_value = [mock_input]
         mock_driver.find_element.return_value = mock_form
+        mock_driver.quit = MagicMock()  # Prevent actual quit
         
         mock_chrome.return_value = mock_driver
         
         form_fields = self.agent.scrape_form_fields("http://example.com")
+        self.assertIsNotNone(form_fields)
         self.assertEqual(form_fields["name"], "text")
 
 if __name__ == '__main__':
