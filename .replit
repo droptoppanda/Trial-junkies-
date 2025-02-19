@@ -13,3 +13,11 @@ author = 39819349
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python main.py"
+
+[[workflows.workflow]]
+name = "Test"
+author = 39819349
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -m unittest discover -s tests -v"
