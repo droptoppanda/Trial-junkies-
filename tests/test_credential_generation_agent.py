@@ -4,7 +4,7 @@ from credential_generation_agent import CredentialGenerationAgent
 
 class TestCredentialGenerationAgent(unittest.TestCase):
     @patch('credential_generation_agent.RapidAPIManager')
-def setUp(self, mock_api_manager):
+    def setUp(self, mock_api_manager):
         mock_api_manager.return_value.get_headers.return_value = {}
         self.agent = CredentialGenerationAgent()
 
