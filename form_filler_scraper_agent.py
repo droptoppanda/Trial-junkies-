@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from selenium import webdriver
+
 class FormFillerScraperAgent:
     def __init__(self, webdriver_path):
         self.scraping_api_key = os.getenv('SCRAPING_API_KEY')

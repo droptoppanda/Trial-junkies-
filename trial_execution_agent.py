@@ -5,6 +5,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 
+from selenium import webdriver
+
 class TrialExecutionAgent:
     def __init__(self, platform_url, webdriver_path):
         self.platform_url = platform_url
