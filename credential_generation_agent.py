@@ -3,6 +3,7 @@ import os
 import requests
 import logging
 from dotenv import load_dotenv
+from rapid_api_manager import RapidAPIManager
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)

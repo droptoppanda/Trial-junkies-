@@ -1,4 +1,5 @@
 
+import os
 import unittest
 from unittest.mock import patch, MagicMock
 from profile_generation_agent import ProfileGenerationAgent
