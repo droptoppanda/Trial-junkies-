@@ -1,0 +1,12 @@
+README.md
+pyproject.toml
+repl_nix_workspace.egg-info/PKG-INFO
+repl_nix_workspace.egg-info/SOURCES.txt
+repl_nix_workspace.egg-info/dependency_links.txt
+repl_nix_workspace.egg-info/requires.txt
+repl_nix_workspace.egg-info/top_level.txt
+tests/test_credential_generation_agent.py
+tests/test_form_filler_scraper_agent.py
+tests/test_profile_generation_agent.py
+tests/test_role_management.py
+tests/test_trial_execution_agent.py

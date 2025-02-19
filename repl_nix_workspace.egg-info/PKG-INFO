@@ -1,0 +1,13 @@
+Metadata-Version: 2.2
+Name: repl-nix-workspace
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.12
+Requires-Dist: asyncio>=3.4.3
+Requires-Dist: base58>=2.1.1
+Requires-Dist: discord-py>=2.5.0
+Requires-Dist: google-generativeai>=0.8.4
+Requires-Dist: python-dotenv>=1.0.1
+Requires-Dist: requests>=2.32.3
+Requires-Dist: selenium>=4.28.1
+Requires-Dist: solana>=0.36.5
