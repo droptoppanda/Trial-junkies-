@@ -1,6 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
+from credential_generation_agent import CredentialGenerationAgent
 
 # Load environment variables
 load_dotenv()

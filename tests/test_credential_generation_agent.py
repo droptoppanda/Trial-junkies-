@@ -9,7 +9,7 @@ class TestCredentialGenerationAgent(unittest.TestCase):
     @patch('credential_generation_agent.requests.get')
     def test_generate_email(self, mock_get):
         mock_get.return_value.status_code = 200
-        mock_get.return_value.json.return_value = ["example.com"]
+        mock_get.return_value.json.return_value = {"email": "test@example.com"}
         email = self.agent.generate_email()
         self.assertIsNotNone(email)
 
