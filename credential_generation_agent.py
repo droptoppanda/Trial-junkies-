@@ -58,7 +58,10 @@ class CredentialGenerationAgent:
             params = {"countryId": "1"}
             response = requests.get(url, headers=headers, params=params, timeout=10)
             if response.status_code == 200:
-                return response.json().get("phone")
+                data = response.json()
+                if isinstance(data, list) and len(data) > 0:
+                    return data[0].get("phoneNumber", "123-456-7890")
+                return data.get("phone", "123-456-7890")
             logging.error(f"Phone API Error: Status {response.status_code}")
             return None
         except Exception as e:
@@ -68,10 +71,7 @@ class CredentialGenerationAgent:
     def generate_card(self):
         try:
             url = "https://fake-valid-cc-data-generator.p.rapidapi.com/card"
-            headers = {
-                "X-RapidAPI-Key": self.card_api_key,
-                "X-RapidAPI-Host": "fake-valid-cc-data-generator.p.rapidapi.com"
-            }
+            headers = self.api_manager.get_headers('fake-valid-cc-data-generator')
             response = requests.get(url, headers=headers, timeout=10)
             if response.status_code == 200:
                 return response.json().get("card_number")
