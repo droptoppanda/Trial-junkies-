@@ -1,0 +1,145 @@
+Temp Mail
+Temp Mail
+Temporary Disposable E-mail fast and easy API - is a service that allows to receive email at a temporary address that self-destructed after a certain time elapses. It is also known by names like: tempmail, 10minutemail, throwaway email, fake-mail or trash-mail.
+
+By Privatix
+Updated 8 months ago
+
+9.9
+
+195ms
+
+100%
+
+Email
+
+
+Fast & Reliable Disposable & MX Email Checker
+Fast & Reliable Disposable & MX Email Checker
+A Temporary Disposable Email Checker API is a service that enables users to check email is a temporary address or not that automatically expires after a set period. It is commonly referred to by various names such as mailnuo, temp-mail, fake-mail, etc.
+
+By OT
+Updated 2 months ago
+
+9.3
+
+410ms
+
+100%
+
+Data
+
+
+Personator
+Personator
+Easily verify a person’s information, lookup and check customer data. Personator is a lightweight, flexible, and powerful customer verification and enrichment API. Personator all-in-one cloud solution verifies contact data (name, address, e-mail, phone number), appends missing information, updates addresses with geolocation data and augments with numerous demographic traits as well.
+
+By Melissa Data
+Updated 8 months ago
+
+9.5
+
+161ms
+
+100%
+
+Artificial Intelligence/Machine Learning
+
+
+
+Trial junkie
+Trial junkie
+Maybe
+
+By Agent Memes
+Updated 6 days ago
+
+Data
+
+
+ScrapeNinja
+ScrapeNinja
+Web scraping API. Two rendering engines, smart retries, rotating proxies. Alternative to Puppeteer and Playwright. Fast, reliable, simple.
+
+By Anthony
+Updated 3 months ago
+
+9.9
+
+4125ms
+
+97%
+
+SMS
+
+
+Virtual Number
+Virtual Number
+Receive SMS for phone verification
+
+By Razor91
+Updated 2 months ago
+
+9.8
+
+4073ms
+
+95%
+
+Financial
+
+
+Free-trial Virtual Card Issuing
+Free-trial Virtual Card Issuing
+Instantly Generates Free-trial Virtual Cards Without Breaking A Sweat
+
+By Swift Software and Services
+Updated 8 months ago
+
+8.6
+
+65ms
+
+100%
+
+Communication
+
+
+Veriphone
+Veriphone
+
+Global phone number verification in a free, fast, reliable JSON API
+
+By Admin
+Updated 8 months ago
+
+9.6
+
+258ms
+
+100%
+
+Payments
+
+
+Fake Valid CC Data Generator
+Fake Valid CC Data Generator
+The API provides you valid and real credit card data for the providers: amex, diners, discover, jcb, maestro, mastercard and visa
+
+By Hunter
+Updated 8 months ago
+
+9.2
+
+56560ms
+
+95%
+
+Business Software
+
+
+Subscription Tracker
+Subscription Tracker
+Software to help businesses track and manage their subscription spending
+
+By Bill Reath
