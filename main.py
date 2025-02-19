@@ -8,6 +8,7 @@ from trial_execution_agent import TrialExecutionAgent
 from form_filler_scraper_agent import FormFillerScraperAgent
 from verification_agent import VerificationAgent
 from proxy_agent import ProxyAgent
+from solana_pay import SolanaPay
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -46,6 +47,16 @@ def main():
             'card': card
         })
 
+        # Check for wallet connection
+        wallet_endpoint = os.getenv('SOLANA_ENDPOINT')
+        wallet_keypair = os.getenv('WALLET_KEYPAIR')
+        
+        if not wallet_endpoint or not wallet_keypair:
+            raise ValueError("Wallet configuration missing. Please set SOLANA_ENDPOINT and WALLET_KEYPAIR in environment variables")
+            
+        # Initialize Solana Pay
+        solana_pay = SolanaPay(wallet_endpoint, wallet_keypair)
+        
         # Get URL and process form
         trial_signup_url = input("Enter the trial signup URL: ")
         form_fields = form_filler_scraper_agent.scrape_form_fields(trial_signup_url)
