@@ -16,7 +16,7 @@ class TestCredentialGenerationAgent(unittest.TestCase):
     @patch('credential_generation_agent.requests.get')
     def test_generate_phone(self, mock_get):
         mock_get.return_value.status_code = 200
-        mock_get.return_value.json.return_value = {"phone": "123-456-7890"}
+        mock_get.return_value.json.return_value = [{"phoneNumber": "123-456-7890"}]
         phone = self.agent.generate_phone()
         self.assertEqual(phone, "123-456-7890")
 
