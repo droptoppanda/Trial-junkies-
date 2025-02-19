@@ -24,7 +24,7 @@ class ProfileGenerationAgent:
         # Return mock data if all required fields are present
         if all([person_data, email, phone, card]):
             # Use the provided mock email in test environment
-            profile_email = "john.doe@example.com" if os.getenv('TESTING') else email
+            profile_email = email if not os.getenv('TESTING') else "john.doe@example.com"
             return {
                 "name": person_data['name'],
                 "address": person_data['address'],

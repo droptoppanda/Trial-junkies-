@@ -17,7 +17,7 @@ class TestTrialExecutionAgent(unittest.TestCase):
         profile = {"name": "John Doe"}
         form_fields = {"name": "John Doe"}
         result = self.agent.execute_trial(profile, form_fields)
-        self.assertEqual(result, "Signup successful")
+        self.assertEqual(result["status"], "success")
 
 if __name__ == '__main__':
     unittest.main()
