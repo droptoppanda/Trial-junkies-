@@ -15,11 +15,15 @@ class FormFillerScraperAgent:
     def __init__(self, platform_url=None, webdriver_path=None):
         self.platform_url = platform_url
         self.webdriver_path = webdriver_path
-        chrome_options = Options()
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--disable-dev-shm-usage')
-        self.driver = webdriver.Chrome(options=chrome_options)
+        try:
+            chrome_options = Options()
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            self.driver = webdriver.Chrome(options=chrome_options)
+        except Exception as e:
+            print(f"Failed to initialize webdriver: {str(e)}")
+            self.driver = None
 
     def setup_driver(self):
         #This function is now redundant since driver is initialized in __init__

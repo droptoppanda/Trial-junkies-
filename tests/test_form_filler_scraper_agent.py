@@ -4,7 +4,7 @@ from form_filler_scraper_agent import FormFillerScraperAgent
 
 class TestFormFillerScraperAgent(unittest.TestCase):
     def setUp(self):
-        self.agent = FormFillerScraperAgent(scraping_api_key="dummy_key", webdriver_path="/path/to/chromedriver")
+        self.agent = FormFillerScraperAgent(platform_url="http://example.com", webdriver_path="/path/to/chromedriver")
 
     @patch('form_filler_scraper_agent.requests.post')
     def test_scrape_form_fields(self, mock_post):
