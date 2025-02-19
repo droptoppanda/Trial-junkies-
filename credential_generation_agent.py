@@ -9,9 +9,34 @@ logging.basicConfig(level=logging.INFO)
 
 class CredentialGenerationAgent:
     def __init__(self):
-        self.personator_api_key = os.getenv('PERSONATOR_API_KEY')
+        self.personator_api_key = os.getenv('RAPIDAPI_KEY')
         self.virtual_number_api_key = os.getenv('VIRTUAL_NUMBER_API_KEY')
         self.card_api_key = os.getenv('FAKE_VALID_CC_DATA_GENERATOR_API_KEY')
+        
+    def generate_person(self):
+        try:
+            url = "https://personator.p.rapidapi.com/generate"
+            headers = {
+                "X-RapidAPI-Key": self.personator_api_key,
+                "X-RapidAPI-Host": "personator.p.rapidapi.com"
+            }
+            response = requests.get(url, headers=headers, timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                return {
+                    'name': f"{data.get('firstName')} {data.get('lastName')}",
+                    'address': f"{data.get('streetAddress')}",
+                    'city': data.get('city'),
+                    'state': data.get('state'),
+                    'zip': data.get('zipCode'),
+                    'ssn': data.get('ssn'),
+                    'dob': data.get('dateOfBirth')
+                }
+            logging.error(f"Personator API Error: Status {response.status_code}")
+            return None
+        except Exception as e:
+            logging.error(f"Person generation failed: {str(e)}")
+            return None
         
     def generate_email(self):
         try:

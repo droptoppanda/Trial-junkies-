@@ -14,8 +14,22 @@ class ProfileGenerationAgent:
         }
 
     def generate_profile(self):
-        url = "https://randomuser.me/api/"  # Actual endpoint
-        response = requests.get(url, headers=self.headers)
+        credential_agent = CredentialGenerationAgent()
+        person_data = credential_agent.generate_person()
+        
+        if person_data:
+            return {
+                "name": person_data['name'],
+                "address": person_data['address'],
+                "email": credential_agent.generate_email(),
+                "phone": credential_agent.generate_phone(),
+                "card": credential_agent.generate_card(),
+                "city": person_data['city'],
+                "state": person_data['state'],
+                "zip": person_data['zip'],
+                "ssn": person_data['ssn'],
+                "dob": person_data['dob']
+            }
         if response.status_code == 200:
             data = response.json()
             if 'results' in data and len(data['results']) > 0:
