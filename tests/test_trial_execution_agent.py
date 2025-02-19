@@ -13,6 +13,12 @@ class TestTrialExecutionAgent(unittest.TestCase):
         mock_driver.find_elements.return_value = [mock_driver]
         mock_driver.get.return_value = None
         mock_driver.quit.return_value = None
+        mock_driver.submit.return_value = None
+        
+        # Mock WebDriverWait
+        mock_wait = MagicMock()
+        mock_wait.until.return_value = mock_driver
+        with patch('trial_execution_agent.WebDriverWait', return_value=mock_wait):
 
         profile = {"name": "John Doe"}
         form_fields = {"name": "John Doe"}
