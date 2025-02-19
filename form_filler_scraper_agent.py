@@ -49,9 +49,6 @@ class FormFillerScraperAgent:
         except Exception as e:
             print(f"Error scraping form: {str(e)}")
             return None
-        finally:
-            if self.driver:
-                self.driver.quit()
 
     def fill_form(self, url, form_data):
         try:
