@@ -60,10 +60,9 @@ class CredentialGenerationAgent:
             if response.status_code == 200:
                 data = response.json()
                 if isinstance(data, list) and len(data) > 0:
-                    return data[0].get("phoneNumber", "123-456-7890")
-                return data.get("phone", "123-456-7890")
+                    return data[0].get("phoneNumber")
             logging.error(f"Phone API Error: Status {response.status_code}")
-            return None
+            return "123-456-7890"  # Fallback value
         except Exception as e:
             logging.error(f"Phone generation failed: {str(e)}")
             return None
@@ -76,7 +75,7 @@ class CredentialGenerationAgent:
             if response.status_code == 200:
                 return response.json().get("card_number")
             logging.error(f"Card API Error: Status {response.status_code}")
-            return None
+            return "4111-1111-1111-1111"  # Fallback value
         except Exception as e:
             logging.error(f"Card generation failed: {str(e)}")
             return None
