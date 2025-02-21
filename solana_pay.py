@@ -80,10 +80,11 @@ class SolanaPay:
             transfer_ix = transfer(transfer_params)
             
             # Create message
+            from solders.hash import Hash
             message = Message.new_with_blockhash(
                 [transfer_ix],
                 self.keypair.pubkey(),
-                recent_blockhash
+                Hash.from_string(recent_blockhash)
             )
             
             # Create transaction with required parameters
