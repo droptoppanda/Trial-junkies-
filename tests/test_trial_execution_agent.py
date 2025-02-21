@@ -30,10 +30,12 @@ class TestTrialExecutionAgent(unittest.TestCase):
 
         # Mock verification agent
         with patch('verification_agent.VerificationAgent') as mock_verify:
-            mock_verify.return_value.verify_trial_creation.return_value = True
+            mock_verify_instance = mock_verify.return_value
+            mock_verify_instance.verify_trial_creation.return_value = True
 
             # Mock successful form submission
             mock_driver.current_url = "http://example.com/success"
+            mock_driver.page_source = "<html><body>Success</body></html>"
 
             profile = {"name": "John Doe", "trial_created": True}
             form_fields = {"name": "John Doe"}

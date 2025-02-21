@@ -10,8 +10,8 @@ class SolanaPay:
     def __init__(self, endpoint, keypair_base58):
         self.client = Client(endpoint)
         # Convert base58 string to keypair properly
-        seed_bytes = base58.b58decode(keypair_base58)[:32]  # Take first 32 bytes as seed
-        self.keypair = Keypair.from_seed(seed_bytes)
+        seed_bytes = base58.b58decode(keypair_base58)
+        self.keypair = Keypair.from_bytes(seed_bytes)
 
     def get_balance(self):
         return self.client.get_balance(self.keypair.public_key)
