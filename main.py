@@ -13,8 +13,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+def install_dependencies():
+    import subprocess
+    logging.info("Installing dependencies...")
+    try:
+        subprocess.run(['upm', 'add', 'requests', 'discord-py', 'google-generativeai', 'python-dotenv', 'selenium', 'solana'], check=True)
+        logging.info("Dependencies installed successfully")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Failed to install dependencies: {e}")
+        raise
+
 def main():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    install_dependencies()
     from discord_bot import run_bot
     run_bot()
     
