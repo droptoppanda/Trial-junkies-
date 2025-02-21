@@ -29,7 +29,7 @@ class TestTrialExecutionAgent(unittest.TestCase):
         mock_wait.return_value = mock_wait_instance
 
         # Mock verification agent
-        with patch('verification_agent.VerificationAgent') as mock_verify:
+        with patch('trial_execution_agent.VerificationAgent') as mock_verify:
             mock_verify_instance = mock_verify.return_value
             mock_verify_instance.verify_trial_creation.return_value = True
 
