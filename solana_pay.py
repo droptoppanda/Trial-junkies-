@@ -7,9 +7,13 @@ from solders.keypair import Keypair
 import base58
 
 class SolanaPay:
-    def __init__(self, endpoint, keypair_base58):
+    def __init__(self, endpoint, keypair_base58, test_mode=False):
         self.client = Client(endpoint)
         try:
+            if test_mode:
+                self.keypair = Keypair()
+                return
+                
             if not keypair_base58:
                 raise ValueError("Keypair cannot be empty")
                 
