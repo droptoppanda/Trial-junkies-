@@ -9,6 +9,7 @@ class TestGeminiAgent(unittest.TestCase):
 
     @patch('gemini_agent.genai')
     def test_generate_content(self, mock_genai):
+        # Test successful case
         mock_response = MagicMock()
         mock_response.text = "Generated response"
         
@@ -18,6 +19,11 @@ class TestGeminiAgent(unittest.TestCase):
         
         response = self.agent.generate_content("Test prompt")
         self.assertEqual(response, "Generated response")
+
+        # Test error case
+        mock_model.generate_content.side_effect = Exception("API Error")
+        error_response = self.agent.generate_content("Test prompt")
+        self.assertEqual(error_response, "Error generating content: API Error")
 
 if __name__ == '__main__':
     unittest.main()
