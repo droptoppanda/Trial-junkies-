@@ -45,10 +45,13 @@ def install_dependencies():
         raise
 
 def main():
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    install_dependencies()
-    from discord_bot import run_bot
-    run_bot()
+    logging.basicConfig(level=logging.INFO)
+    try:
+        from discord_bot import run_bot
+        run_bot()
+    except Exception as e:
+        logging.error(f"Error starting bot: {e}")
+        raise
     
     try:
         webdriver_path = os.getenv('WEBDRIVER_PATH')
