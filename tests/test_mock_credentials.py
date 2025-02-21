@@ -16,7 +16,8 @@ class TestMockCredentials(TestCase):
         'FAKE_VALID_CC_DATA_GENERATOR_API_KEY': 'mock_cc_gen_key_12345',
         'TEMP_MAIL_API_KEY': 'mock_temp_mail_key_12345',
         'PROXY_API_KEY': 'mock_proxy_key_12345',
-        'API_KEY_SUBSCRIPTION': 'mock_subscription_key_12345'
+        'API_KEY_SUBSCRIPTION': 'mock_subscription_key_12345',
+        'GEMINI_API_KEY': 'mock_gemini_key_12345'
     })
     def test_mock_credentials(self):
         """Test that all mock credentials are properly set"""
@@ -30,6 +31,14 @@ class TestMockCredentials(TestCase):
         self.assertEqual(os.getenv('TEMP_MAIL_API_KEY'), 'mock_temp_mail_key_12345')
         self.assertEqual(os.getenv('PROXY_API_KEY'), 'mock_proxy_key_12345')
         self.assertEqual(os.getenv('API_KEY_SUBSCRIPTION'), 'mock_subscription_key_12345')
+        self.assertEqual(os.getenv('GEMINI_API_KEY'), 'mock_gemini_key_12345')
+
+    def test_missing_credentials(self):
+        """Test handling of missing credentials"""
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertIsNone(os.getenv('DISCORD_BOT_TOKEN'))
+            self.assertIsNone(os.getenv('WALLET_KEYPAIR'))
+            self.assertIsNone(os.getenv('RAPIDAPI_KEY'))
 
 if __name__ == '__main__':
     unittest.main()
