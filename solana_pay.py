@@ -14,16 +14,12 @@ class SolanaPay:
                 raise ValueError("Keypair cannot be empty")
                 
             if isinstance(keypair_base58, str):
-                # Ensure the string is valid base58
-                decoded = base58.b58decode(keypair_base58)
-                if len(decoded) != 64:  # Expected length for ed25519 keypair
-                    self.keypair = Keypair.from_base58_string(keypair_base58)
-                else:
-                    self.keypair = Keypair.from_bytes(decoded[:32])
+                # Try to create keypair directly from base58 string
+                self.keypair = Keypair.from_base58_string(keypair_base58)
             else:
-                # Handle byte input
-                if len(keypair_base58) != 32:
-                    raise ValueError("Keypair bytes must be 32 bytes long")
+                # For byte input, ensure we have full 64 bytes
+                if len(keypair_base58) != 64:
+                    raise ValueError("Keypair bytes must be 64 bytes long")
                 self.keypair = Keypair.from_bytes(keypair_base58)
                 
         except Exception as e:
