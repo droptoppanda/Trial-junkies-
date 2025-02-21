@@ -2,9 +2,9 @@ import os
 import unittest
 from unittest.mock import patch, MagicMock
 from solana_pay import SolanaPay
-from solana.rpc.api import Client
-from solana.transaction import Transaction
-from solana.keypair import Keypair
+from solders.rpc.client import Client
+from solders.transaction import Transaction
+from solders.keypair import Keypair
 
 class TestSolanaPay(unittest.TestCase):
     def setUp(self):
