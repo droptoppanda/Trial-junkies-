@@ -5,8 +5,8 @@ from solana_pay import SolanaPay
 
 class TestSolanaPay(unittest.TestCase):
     def setUp(self):
-        # Using a zero-filled test keypair for testing
-        test_keypair = bytes([0] * 64)  # Use a zero-filled test keypair for testing
+        # Using a valid test keypair string
+        test_keypair = "4wBqpZM9xkz5QHuiDCeYYxx1qZBVNi6JiuvAogtfXJkEwdS6DSXPKVSXrPnpvZHrZGPYwpihfxkKoZwE3oHV1Kz7"
         self.solana_pay = SolanaPay("test_endpoint", test_keypair)
 
     @patch('solana_pay.Client')
