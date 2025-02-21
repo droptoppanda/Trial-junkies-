@@ -5,6 +5,7 @@ from gemini_agent import GeminiAgent
 
 class TestGeminiAgent(unittest.TestCase):
     def setUp(self):
+        os.environ['GEMINI_API_KEY'] = 'test_key'
         self.agent = GeminiAgent()
 
     @patch('gemini_agent.genai')
