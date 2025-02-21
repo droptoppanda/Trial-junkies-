@@ -27,8 +27,8 @@ class RapidAPIManager:
                 'base_url': 'https://privatix-temp-mail-v1.p.rapidapi.com'
             },
             'virtual_number': {
-                'host': 'virtual-number.p.rapidapi.com',
-                'base_url': 'https://virtual-number.p.rapidapi.com'
+                'host': 'virtual-phone-number.p.rapidapi.com',
+                'base_url': 'https://virtual-phone-number.p.rapidapi.com'
             },
             'card_generator': {
                 'host': 'fake-valid-cc-data-generator.p.rapidapi.com',
@@ -37,10 +37,6 @@ class RapidAPIManager:
             'scraper': {
                 'host': 'scrapeninja.p.rapidapi.com',
                 'base_url': 'https://scrapeninja.p.rapidapi.com'
-            },
-            'virtual-number': {
-                'host': 'virtual-phone-number.p.rapidapi.com',
-                'base_url': 'https://virtual-phone-number.p.rapidapi.com'
             }
         }
     
