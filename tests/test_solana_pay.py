@@ -7,7 +7,9 @@ from solana_pay import SolanaPay
 class TestSolanaPay(unittest.TestCase):
     def setUp(self):
         os.environ['TESTING'] = 'true'
-        self.solana_pay = SolanaPay("test_endpoint", "5KHw2RWVKxqCxqvzT6aj8AHNV9VDyPn9KCwLLzG89BJV")
+        # Using a valid test keypair that's base58 encoded
+        test_keypair = "4NMwxzFrpZQVX9sXZwSvSD8CX6WdZheQh7hXCFAEYQmeYet1U2ZoHqzqrFft3kGbKzGjBYw93RB4XdDSFQmkRUMv"
+        self.solana_pay = SolanaPay("test_endpoint", test_keypair)
         del os.environ['TESTING']
 
     @patch('solana_pay.Client')
