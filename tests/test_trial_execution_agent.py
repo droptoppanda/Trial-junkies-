@@ -27,7 +27,10 @@ class TestTrialExecutionAgent(unittest.TestCase):
         mock_wait_instance.until.side_effect = [mock_input, mock_form]
         mock_wait.return_value = mock_wait_instance
         
-        profile = {"name": "John Doe"}
+        # Mock successful navigation
+        mock_driver.current_url = "http://example.com/success"
+        
+        profile = {"name": "John Doe", "trial_created": True}
         form_fields = {"name": "John Doe"}
         
         result = self.agent.execute_trial(profile, form_fields)
