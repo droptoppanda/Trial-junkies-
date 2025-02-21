@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from trial_execution_agent import TrialExecutionAgent
 
 class TestTrialExecutionAgent(unittest.TestCase):
