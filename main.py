@@ -15,6 +15,8 @@ load_dotenv()
 
 def main():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    from discord_bot import run_bot
+    run_bot()
     
     try:
         webdriver_path = os.getenv('WEBDRIVER_PATH')

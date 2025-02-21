@@ -1,19 +1,19 @@
 import discord
 from discord.ext import commands
-import asyncio
-from subscription_verification import verify_subscription  # Import our subscription verifier
+import os
+from dotenv import load_dotenv
 from trial_execution_agent import TrialExecutionAgent
 from profile_generation_agent import ProfileGenerationAgent
 from credential_generation_agent import CredentialGenerationAgent
 from verification_agent import VerificationAgent
-import os
-from subscription_plans import SUBSCRIPTION_PLANS
+from subscription_verification import verify_subscription
 
-# Replace with your bot token
+load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 
 intents = discord.Intents.default()
-intents.members = True  # Enable if you need member details
+intents.message_content = True
+intents.members = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
@@ -21,81 +21,66 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 async def on_ready():
     print(f"Bot logged in as {bot.user}")
 
-@bot.command(name="signup")
-async def signup(ctx, email: str, name: str):
-    """
-    Simulate a signup command where
-    """
-    profile = {"email": email, "name": name}
-    profile_generation_agent = ProfileGenerationAgent()
-    credential_generation_agent = CredentialGenerationAgent()
+@bot.command(name="trial")
+async def create_trial(ctx, service_url: str):
+    """Create a trial account for the specified service"""
     try:
-        profile_generation_agent.generate_profile(profile)
-        credentials = credential_generation_agent.generate_credentials(profile)
-        await ctx.send(f"Signup successful! Credentials: {credentials}")
-    except ValueError as e:
-        await ctx.send(str(e))
+        # Verify subscription
+        is_active, _, sub_details = verify_subscription(str(ctx.author.id))
+        if not is_active:
+            await ctx.send("❌ Active subscription required for trial creation")
+            return
 
-@bot.command(name="verify_subscription")
-async def verify_subscription_command(ctx, email: str):
-    """
-    Verify the subscription status of a user
-    """
-    try:
-        subscription_status = verify_subscription(email)
-        await ctx.send(f"Subscription status: {subscription_status}")
-    except ValueError as e:
-        await ctx.send(str(e))
+        if sub_details.get('trials_remaining', 0) <= 0:
+            await ctx.send("❌ No trials remaining in current subscription")
+            return
 
-@bot.command(name='start_trial')
-async def start_trial(ctx, profile_name):
-    profile = {"name": profile_name, "trial_created": False}
-    form_fields = {"name": profile_name}  # Example form fields
-    try:
-        verification_agent = VerificationAgent()
-        verification_agent.verify_trial_creation(profile)
-        trial_execution_agent = TrialExecutionAgent(platform_url="http://example.com", webdriver_path="/path/to/chromedriver")
-        trial_details = trial_execution_agent.execute_trial(profile, form_fields, discord_user_id=str(ctx.author.id))
-        
-        if trial_details and trial_details.get("status") == "success":
-            # Send public success message
-            await ctx.send("Trial created successfully! Check your DMs for details.")
-            
+        # Generate profile
+        profile_agent = ProfileGenerationAgent()
+        profile = profile_agent.generate_profile()
+
+        # Execute trial
+        trial_agent = TrialExecutionAgent(service_url, os.getenv('WEBDRIVER_PATH'))
+        result = trial_agent.execute_trial(profile, {}, discord_user_id=str(ctx.author.id))
+
+        if result["status"] == "success":
+            # Send public confirmation
+            await ctx.send("✅ Trial created successfully! Check your DMs for login details.")
+
             # Send private details
             dm_message = (
-                f"🎉 Trial Creation Success!\n\n"
-                f"Profile: {trial_details['profile']['name']}\n"
-                f"Platform: {trial_details['platform_url']}\n"
-                f"Credentials: {trial_details['credentials']}\n"
-                f"Created: {trial_details['timestamp']}"
+                "🎉 **Trial Account Created!**\n"
+                f"**Service:** {service_url}\n"
+                f"**Email:** {profile['email']}\n"
+                f"**Password:** {profile.get('password', 'Check email for password')}\n"
+                "\n⚠️ Keep these details safe and private!"
             )
             try:
                 await ctx.author.send(dm_message)
             except discord.Forbidden:
-                await ctx.send("⚠️ Couldn't send DM. Please enable DMs from server members.")
+                await ctx.send("⚠️ Couldn't send private details. Please enable DMs from server members.")
         else:
-            await ctx.send("❌ Trial creation failed.")
-    except ValueError as e:
-        await ctx.send(str(e))
+            await ctx.send(f"❌ Trial creation failed: {result.get('error', 'Unknown error')}")
 
-@bot.command(name="list_plans")
-async def list_plans(ctx):
-    """
-    List all available subscription plans.
-    """
-    plans = "\n".join([f"{plan.name}: ${plan.price} - {plan.trial_limit} trials" for plan in SUBSCRIPTION_PLANS])
-    await ctx.send(f"Available subscription plans:\n{plans}")
+    except Exception as e:
+        await ctx.send(f"❌ Error: {str(e)}")
 
-@bot.command(name="subscribe")
-async def subscribe(ctx, plan_name: str):
-    """
-    Subscribe to a plan.
-    """
-    plan = next((plan for plan in SUBSCRIPTION_PLANS if plan.name.lower() == plan_name.lower()), None)
-    if plan:
-        # Here you would integrate with your payment processing system
-        await ctx.send(f"Subscribed to {plan.name} plan for ${plan.price}!")
-    else:
-        await ctx.send("Plan not found. Use !list_plans to see available plans.")
+@bot.command(name="balance")
+async def check_balance(ctx):
+    """Check remaining trials in subscription"""
+    try:
+        is_active, is_trial, sub_details = verify_subscription(str(ctx.author.id))
+        if not is_active:
+            await ctx.send("❌ No active subscription found")
+            return
 
-bot.run(DISCORD_BOT_TOKEN)
+        trials_left = sub_details.get('trials_remaining', 0)
+        await ctx.send(f"🎫 Trials remaining: {trials_left}")
+    except Exception as e:
+        await ctx.send(f"❌ Error checking balance: {str(e)}")
+
+def run_bot():
+    bot.run(DISCORD_BOT_TOKEN)
+
+if __name__ == "__main__":
+    run_bot()
