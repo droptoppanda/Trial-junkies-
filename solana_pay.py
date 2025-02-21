@@ -77,11 +77,22 @@ class SolanaPay:
                 lamports=amount
             )
             
-            # Create transaction with proper signing
-            transaction = Transaction()
-            transaction.add(transfer(transfer_params))
-            transaction.recent_blockhash = recent_blockhash
-            transaction.sign([self.keypair])
+            # Create transfer instruction
+            transfer_ix = transfer(transfer_params)
+            
+            # Create message
+            message = Message.new_with_blockhash(
+                [transfer_ix],
+                self.keypair.pubkey(),
+                recent_blockhash
+            )
+            
+            # Create transaction with required parameters
+            transaction = Transaction(
+                from_keypairs=[self.keypair],
+                message=message,
+                recent_blockhash=recent_blockhash
+            )
             
             return transaction
         except Exception as e:

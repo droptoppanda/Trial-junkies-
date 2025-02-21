@@ -27,12 +27,20 @@ class TestSolanaPay(unittest.TestCase):
         self.assertEqual(balance["result"]["value"], 1000000)
 
     @patch('solana_pay.Client')
-    def test_process_payment(self, mock_client):
+    @patch('solders.message.Message')
+    @patch('solders.transaction.Transaction')
+    def test_process_payment(self, mock_transaction, mock_message, mock_client):
         # Configure mock client instance
         mock_client_instance = mock_client.return_value
         mock_client_instance.get_balance.return_value = {
             "result": {"value": 1000000}
         }
+        
+        # Configure message mock
+        mock_message.new_with_blockhash.return_value = MagicMock()
+        
+        # Configure transaction mock
+        mock_transaction.return_value = MagicMock()
         mock_client_instance.get_recent_blockhash.return_value = {
             "result": {"value": {"blockhash": "test_blockhash"}}
         }
