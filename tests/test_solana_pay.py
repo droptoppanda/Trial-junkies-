@@ -5,8 +5,8 @@ from solana_pay import SolanaPay
 
 class TestSolanaPay(unittest.TestCase):
     def setUp(self):
-        # Using valid 64-byte test keypair
-        self.solana_pay = SolanaPay("test_endpoint", "4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofM95zVnZh3YXhJNa1jHYdq4PmkhF9g4sfJgpDwKZ5d9u8X8")
+        # Using a valid test keypair for Solana
+        self.solana_pay = SolanaPay("test_endpoint", "4wBqpZM9xkz5QHuiDCeYYxx1qZBVNi6JiuvAogtfXJkEwdS6DSXPKVSXrPnpvZHrZGPYwpihfxkKoZwE3oHV1Kz7")
 
     @patch('solana_pay.Client')
     def test_get_balance(self, mock_client):
