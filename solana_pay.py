@@ -45,8 +45,8 @@ class SolanaPay:
                 return False, "Invalid payment amount"
                 
             # Create and send transaction
-            recipient = self.keypair.public_key
-            transaction = self.create_payment(amount, recipient)
+            recipient = self.keypair.pubkey
+            transaction = self.create_payment(amount, str(recipient))
             response = self.client.send_transaction(transaction, self.keypair)
             
             if not response or 'result' not in response:
