@@ -13,9 +13,19 @@ class TestTrialExecutionAgent(unittest.TestCase):
     @patch('trial_execution_agent.WebDriverWait')
     def test_execute_trial(self, mock_wait, mock_chrome):
         mock_driver = mock_chrome.return_value
-        mock_element = MagicMock()
-        mock_element.submit.return_value = None
-        mock_wait.return_value.until.return_value = mock_element
+        mock_driver.get.return_value = None
+        mock_driver.quit.return_value = None
+        
+        # Mock form elements
+        mock_input = MagicMock()
+        mock_input.send_keys.return_value = None
+        mock_form = MagicMock()
+        mock_form.submit.return_value = None
+        
+        # Configure WebDriverWait mock to return our mocked elements
+        mock_wait_instance = MagicMock()
+        mock_wait_instance.until.side_effect = [mock_input, mock_form]
+        mock_wait.return_value = mock_wait_instance
         
         profile = {"name": "John Doe"}
         form_fields = {"name": "John Doe"}
