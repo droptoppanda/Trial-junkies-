@@ -10,9 +10,14 @@ class TestSolanaPay(unittest.TestCase):
 
     @patch('solana_pay.Client')
     def test_get_balance(self, mock_client):
-        mock_client.return_value.get_balance.return_value = {
+        # Configure the mock client instance
+        mock_client_instance = mock_client.return_value
+        mock_client_instance.get_balance.return_value = {
             "result": {"value": 1000000}
         }
+        
+        # Replace the test instance's client with our mock
+        self.solana_pay.client = mock_client_instance
         
         balance = self.solana_pay.get_balance()
         self.assertEqual(balance["result"]["value"], 1000000)
