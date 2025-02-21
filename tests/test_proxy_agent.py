@@ -5,6 +5,7 @@ from proxy_agent import ProxyAgent
 
 class TestProxyAgent(unittest.TestCase):
     def setUp(self):
+        os.environ['PROXY_API_KEY'] = 'test_key'
         self.agent = ProxyAgent()
 
     @patch('proxy_agent.requests.get')
