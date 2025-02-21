@@ -43,8 +43,23 @@ class TestSolanaPay(unittest.TestCase):
         mock_client_instance.send_transaction.return_value = {
             "result": "test_signature"
         }
-        mock_client_instance.send_transaction.return_value = {
-            "result": "test_signature"
+
+        # Mock transaction confirmation
+        mock_client_instance.get_confirmed_transaction.return_value = {
+            "result": {
+                "meta": {"err": None},
+                "transaction": {"signatures": ["test_signature"]},
+                "confirmations": 1
+            }
+        }
+        
+        # Set the mock client
+        self.solana_pay.client = mock_client_instance
+        
+        # Test payment processing
+        success, result = self.solana_pay.process_payment(100)
+        self.assertTrue(success)
+        self.assertEqual(result, "test_signature")
         }
         mock_client_instance.get_confirmed_transaction.return_value = {
             "result": {
