@@ -1,5 +1,8 @@
 import unittest
 from unittest.mock import patch, MagicMock
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from trial_execution_agent import TrialExecutionAgent
 
 class TestTrialExecutionAgent(unittest.TestCase):
