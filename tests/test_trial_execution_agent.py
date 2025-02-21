@@ -28,17 +28,17 @@ class TestTrialExecutionAgent(unittest.TestCase):
         mock_wait_instance.until.side_effect = [mock_input, mock_form]
         mock_wait.return_value = mock_wait_instance
 
+        profile = {"name": "John Doe", "trial_created": True}
+        form_fields = {"name": "John Doe"}
+
         # Mock verification agent
-        with patch('trial_execution_agent.VerificationAgent') as mock_verify:
+        with patch('verification_agent.VerificationAgent') as mock_verify:
             mock_verify_instance = mock_verify.return_value
             mock_verify_instance.verify_trial_creation.return_value = True
 
             # Mock successful form submission
             mock_driver.current_url = "http://example.com/success"
             mock_driver.page_source = "<html><body>Success</body></html>"
-
-            profile = {"name": "John Doe", "trial_created": True}
-            form_fields = {"name": "John Doe"}
 
             result = self.agent.execute_trial(profile, form_fields)
 
