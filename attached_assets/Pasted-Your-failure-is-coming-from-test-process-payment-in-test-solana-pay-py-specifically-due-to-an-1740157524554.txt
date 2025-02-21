@@ -1,0 +1,84 @@
+Your failure is coming from `test_process_payment` in **test_solana_pay.py**, specifically due to an issue in the `Transaction` initialization.  
+
+### **Why This Is Happening:**  
+- The error message:  
+  ```
+  Transaction.__new__() missing 3 required positional arguments: 'from_keypairs', 'message', and 'recent_blockhash'
+  ```
+  suggests that when the payment processing test runs, the **Solana transaction object isn't being initialized correctly**.  
+- This could be due to:  
+  1. **Incorrect or missing parameters** when creating the `Transaction` object.  
+  2. **Mocking issue** where the test isn't properly providing the expected transaction data.  
+  3. **A real API issue** where the function is failing due to a misconfigured Solana RPC setup.  
+
+---
+
+### **How to Fix It:**  
+
+#### **1. Check How You're Creating the Transaction**  
+Go to **test_solana_pay.py** (Line 55) and check how you're initializing the transaction. It should look something like this:  
+
+```python
+from solana.transaction import Transaction
+
+txn = Transaction()
+txn.add(instruction)  # Ensure you are adding a valid instruction
+```
+Ensure that when you create the `Transaction`, you **provide all required arguments** (`from_keypairs`, `message`, `recent_blockhash`).  
+
+**Example Fix:**  
+```python
+txn = Transaction(
+    from_keypairs=[payer_keypair],  # Ensure you pass a valid payer keypair
+    message=message,  # Construct a valid message
+    recent_blockhash=recent_blockhash  # Fetch a valid recent blockhash
+)
+```
+---
+
+#### **2. Ensure Your Mock Data is Correct**  
+If you're **mocking Solana transactions**, make sure the test provides the required attributes. Modify the test like this:  
+
+```python
+@patch("solana.transaction.Transaction")
+def test_process_payment(self, mock_transaction):
+    mock_transaction.return_value = Transaction(
+        from_keypairs=[mock_keypair],
+        message=mock_message,
+        recent_blockhash=mock_blockhash
+    )
+    
+    success = process_payment()
+    self.assertTrue(success)
+```
+This ensures the transaction object has the required attributes.
+
+---
+
+#### **3. Verify the Solana RPC Connection**  
+If your function **relies on a real RPC call**, check if your **Solana RPC URL** in `.env` is set correctly:
+
+```env
+SOLANA_RPC_URL=https://api.mainnet-beta.solana.com  # or devnet
+```
+If the **API is down or misconfigured**, it can lead to transaction failures.
+
+---
+
+### **Final Steps to Debug:**
+1. **Print Debug Info in Your Test**
+   Modify `test_process_payment` to **log the transaction values before the assertion**:  
+   ```python
+   print("Transaction Details:", txn)
+   print("From Keypairs:", txn.from_keypairs)
+   print("Message:", txn.message)
+   print("Recent Blockhash:", txn.recent_blockhash)
+   ```
+
+2. **Rerun the Tests**
+   ```bash
+   pytest tests/
+   ```
+
+3. **If It's Still Failing:**  
+   - Post the code snippet where `Transaction` is initialized, and I'll debug it further. 🚀
