@@ -8,11 +8,10 @@ from solders.keypair import Keypair
 import base58
 
 class SolanaPay:
-    def __init__(self, endpoint, keypair_base58):
+    def __init__(self, endpoint, keypair_base58, test_mode=False):
         self.client = Client(endpoint)
         try:
-            if os.getenv('TESTING') == 'true':
-                # Use deterministic test keypair
+            if test_mode:
                 self.keypair = Keypair()
                 return
                 
@@ -31,7 +30,7 @@ class SolanaPay:
             raise ValueError(f"Invalid keypair format: {str(e)}")
 
     def get_balance(self):
-        return self.client.get_balance(self.keypair.public_key)
+        return self.client.get_balance(self.keypair.pubkey)
 
     def process_payment(self, amount):
         try:
@@ -65,7 +64,7 @@ class SolanaPay:
     def create_payment(self, amount, recipient):
         transaction = Transaction()
         transfer_params = TransferParams(
-            from_pubkey=self.keypair.public_key,
+            from_pubkey=self.keypair.pubkey,
             to_pubkey=PublicKey(recipient),
             lamports=amount
         )
