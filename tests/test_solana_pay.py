@@ -37,7 +37,11 @@ class TestSolanaPay(unittest.TestCase):
             "result": "test_signature"
         }
         mock_client_instance.get_confirmed_transaction.return_value = {
-            "result": {"confirmations": 1}
+            "result": {
+                "meta": {"err": None},
+                "transaction": {"signatures": ["test_signature"]},
+                "confirmations": 1
+            }
         }
         
         # Set the mock client on the test instance
