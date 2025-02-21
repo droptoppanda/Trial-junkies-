@@ -33,7 +33,7 @@ class SolanaPay:
             raise ValueError(f"Invalid keypair format: {str(e)}")
 
     def get_balance(self):
-        return self.client.get_balance(self.keypair.pubkey)
+        return self.client.get_balance(self.keypair.pubkey())
 
     def process_payment(self, amount):
         try:
@@ -47,9 +47,10 @@ class SolanaPay:
                 return False, "Invalid payment amount"
                 
             # Create and send transaction
-            recipient = self.keypair.pubkey
+            recipient = self.keypair.pubkey()
             transaction = self.create_payment(amount, str(recipient))
-            response = self.client.send_transaction(transaction, self.keypair)
+            signed_tx = bytes(transaction)
+            response = self.client.send_transaction(signed_tx)
             
             if not response or 'result' not in response:
                 return False, "Transaction failed"
