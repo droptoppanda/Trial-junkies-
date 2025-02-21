@@ -1,8 +1,10 @@
-
 import os
 import unittest
 from unittest.mock import patch, MagicMock
 from solana_pay import SolanaPay
+from solana.rpc.api import Client
+from solana.transaction import Transaction
+from solana.keypair import Keypair
 
 class TestSolanaPay(unittest.TestCase):
     def setUp(self):
@@ -60,22 +62,25 @@ class TestSolanaPay(unittest.TestCase):
         success, result = self.solana_pay.process_payment(100)
         self.assertTrue(success)
         self.assertEqual(result, "test_signature")
-        }
-        mock_client_instance.get_confirmed_transaction.return_value = {
-            "result": {
-                "meta": {"err": None},
-                "transaction": {"signatures": ["test_signature"]},
-                "confirmations": 1
-            }
-        }
         
-        # Set the mock client on the test instance
-        self.solana_pay.client = mock_client_instance
-        
-        # Test payment processing
-        success, result = self.solana_pay.process_payment(100)
-        self.assertTrue(success)
-        self.assertEqual(result, "test_signature")
+
+    #Additional test case from edited code.
+    def test_transaction_creation(self):
+        self.client = Client("https://api.devnet.solana.com")
+        self.payer = Keypair()
+        self.receiver = Keypair()
+        # Get recent blockhash
+        recent_blockhash = self.client.get_recent_blockhash()["result"]["value"]["blockhash"]
+
+        # Create transaction
+        transaction = Transaction(
+            recent_blockhash=recent_blockhash,
+            fee_payer=self.payer.public_key
+        )
+
+        self.assertIsNotNone(transaction)
+        self.assertEqual(transaction.recent_blockhash, recent_blockhash)
+
 
 if __name__ == '__main__':
     unittest.main()
