@@ -5,11 +5,11 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from dotenv import load_dotenv
 
 load_dotenv()
-
-from selenium import webdriver
 
 class FormFillerScraperAgent:
     def __init__(self, platform_url=None, webdriver_path=None):
@@ -20,7 +20,8 @@ class FormFillerScraperAgent:
             chrome_options.add_argument('--headless')
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--disable-dev-shm-usage')
-            self.driver = webdriver.Chrome(options=chrome_options)
+            service = Service(ChromeDriverManager().install())
+            self.driver = webdriver.Chrome(service=service, options=chrome_options)
         except Exception as e:
             print(f"Failed to initialize webdriver: {str(e)}")
             self.driver = None
