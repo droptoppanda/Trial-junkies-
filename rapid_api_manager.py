@@ -7,9 +7,9 @@ load_dotenv()
 
 class RapidAPIManager:
     def __init__(self):
-        self.api_key = os.getenv('RAPIDAPI_MASTER_KEY')
+        self.api_key = os.getenv('RAPIDAPI_KEY')
         if not self.api_key:
-            raise ValueError("RAPIDAPI_MASTER_KEY not found in environment variables")
+            raise ValueError("RAPIDAPI_KEY not found in environment variables")
             
         self.apis = {
             'personator': {
