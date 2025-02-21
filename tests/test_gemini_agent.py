@@ -8,12 +8,12 @@ class TestGeminiAgent(unittest.TestCase):
         self.agent = GeminiAgent()
 
     @patch('gemini_agent.genai')
-    def test_generate_response(self, mock_genai):
+    def test_generate_content(self, mock_genai):
         mock_model = MagicMock()
         mock_model.generate_content.return_value.text = "Generated response"
         mock_genai.GenerativeModel.return_value = mock_model
         
-        response = self.agent.generate_response("Test prompt")
+        response = self.agent.generate_content("Test prompt")
         self.assertEqual(response, "Generated response")
 
 if __name__ == '__main__':
