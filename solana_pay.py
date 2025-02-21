@@ -1,15 +1,12 @@
 import os
 import logging
-from solana.rpc.api import Client
+from solders.rpc.client import Client
 from solders.transaction import Transaction
 from solders.message import Message
 from solders.system_program import TransferParams, transfer
 from solders.pubkey import Pubkey as PublicKey
 from solders.keypair import Keypair
 import base58
-from solana.rpc.api import Client
-from solana.transaction import Transaction
-from solana.keypair import Keypair
 import logging
 
 
