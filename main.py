@@ -1,6 +1,28 @@
 
 import logging
 import os
+import subprocess
+from dotenv import load_dotenv
+
+# Set up logging first
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def install_dependencies():
+    packages = [
+        'requests', 'discord-py', 'google-generativeai', 'python-dotenv',
+        'selenium', 'solana', 'web3', 'rapid-api-client'
+    ]
+    for package in packages:
+        try:
+            subprocess.run(['upm', 'add', package], check=True)
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Failed to install {package}: {e}")
+            raise
+
+# Install dependencies before imports
+install_dependencies()
+
+# Now import the rest
 from trial_request_agent import TrialRequestAgent
 from credential_generation_agent import CredentialGenerationAgent
 from profile_generation_agent import ProfileGenerationAgent
@@ -9,7 +31,6 @@ from form_filler_scraper_agent import FormFillerScraperAgent
 from verification_agent import VerificationAgent
 from proxy_agent import ProxyAgent
 from solana_pay import SolanaPay
-from dotenv import load_dotenv
 
 load_dotenv()
 
