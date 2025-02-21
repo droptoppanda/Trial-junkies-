@@ -49,8 +49,7 @@ class SolanaPay:
             # Create and send transaction
             recipient = self.keypair.pubkey()
             transaction = self.create_payment(amount, str(recipient))
-            signed_tx = bytes(transaction)
-            response = self.client.send_transaction(signed_tx)
+            response = self.client.send_transaction(transaction)
             
             if not response or 'result' not in response:
                 return False, "Transaction failed"
