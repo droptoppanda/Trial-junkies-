@@ -81,33 +81,38 @@ class SolanaPay:
             recent_blockhash
         )
         
-        # Create transaction with message
+        # Create and sign transaction
         transaction = Transaction(
             from_keypairs=[self.keypair],
             message=message,
             recent_blockhash=recent_blockhash
         )
+        transaction.sign([self.keypair])
         
         return transaction
 
     def verify_payment(self, transaction_id):
-        response = self.client.get_confirmed_transaction(transaction_id)
-        if not response or 'result' not in response:
+        try:
+            response = self.client.get_confirmed_transaction(transaction_id)
+            if not response or 'result' not in response:
+                return False
+                
+            result = response['result']
+            if not result:
+                return False
+                
+            # Check transaction status
+            if result.get('meta', {}).get('err') is not None:
+                return False
+                
+            # Verify confirmations
+            if result.get('confirmations', 0) < 1:
+                return False
+                
+            return True
+        except Exception as e:
+            logging.error(f"Payment verification error: {str(e)}")
             return False
-            
-        result = response['result']
-        if not result:
-            return False
-            
-        # Check if transaction was successful (no errors)
-        if result.get('meta', {}).get('err') is not None:
-            return False
-            
-        # Verify signature matches
-        if not result.get('transaction', {}).get('signatures'):
-            return False
-            
-        return True
 
     def receive_subscription(self, amount, sender):
         transaction = self.create_payment(amount, self.keypair.public_key)        
