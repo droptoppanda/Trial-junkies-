@@ -42,6 +42,15 @@ To start the application, run:
 npm start
 ```
 
+### Using the Bot
+
+1. **Invite the Bot to Your Server**: Use the OAuth2 URL to invite the bot to your Discord server.
+2. **Bot Commands**: The bot supports the following commands:
+    - `!help`: Displays a list of available commands.
+    - `!balance`: Shows the current balance of the wallet.
+    - `!price [symbol]`: Fetches the current price of the specified cryptocurrency.
+    - `!transfer [amount] [address]`: Transfers the specified amount to the given address.
+
 ### Running Tests
 
 To run tests, use:
