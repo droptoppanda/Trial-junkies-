@@ -63,13 +63,24 @@ class SolanaPay:
             return False, str(e)
 
     def create_payment(self, amount, recipient):
-        transaction = Transaction()
+        # Get recent blockhash
+        recent_blockhash = self.client.get_recent_blockhash()['result']['value']['blockhash']
+        
+        # Create transfer instruction
         transfer_params = TransferParams(
             from_pubkey=self.keypair.pubkey,
             to_pubkey=PublicKey(recipient),
             lamports=amount
         )
-        transaction.add(transfer(transfer_params))
+        transfer_ix = transfer(transfer_params)
+        
+        # Create transaction with all required parameters
+        transaction = Transaction(
+            from_keypairs=[self.keypair],
+            message=transfer_ix,
+            recent_blockhash=recent_blockhash
+        )
+        
         return transaction
 
     def verify_payment(self, transaction_id):
