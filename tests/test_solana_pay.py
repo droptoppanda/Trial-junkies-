@@ -25,15 +25,20 @@ class TestSolanaPay(unittest.TestCase):
 
     @patch('solana_pay.Client')
     def test_process_payment(self, mock_client):
-        mock_client.return_value.get_balance.return_value = {
+        # Configure mock client instance
+        mock_client_instance = mock_client.return_value
+        mock_client_instance.get_balance.return_value = {
             "result": {"value": 1000000}
         }
-        mock_client.return_value.send_transaction.return_value = {
+        mock_client_instance.send_transaction.return_value = {
             "result": "test_signature"
         }
-        mock_client.return_value.get_confirmed_transaction.return_value = {
+        mock_client_instance.get_confirmed_transaction.return_value = {
             "result": {"confirmations": 1}
         }
+        
+        # Set the mock client on the test instance
+        self.solana_pay.client = mock_client_instance
         
         success, result = self.solana_pay.process_payment(100)
         self.assertTrue(success)
