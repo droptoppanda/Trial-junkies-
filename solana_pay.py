@@ -10,15 +10,25 @@ class SolanaPay:
     def __init__(self, endpoint, keypair_base58):
         self.client = Client(endpoint)
         try:
+            if not keypair_base58:
+                raise ValueError("Keypair cannot be empty")
+                
             if isinstance(keypair_base58, str):
-                # First try direct from base58 secret key
-                self.keypair = Keypair.from_base58_string(keypair_base58)
+                # Ensure the string is valid base58
+                decoded = base58.b58decode(keypair_base58)
+                if len(decoded) != 64:  # Expected length for ed25519 keypair
+                    self.keypair = Keypair.from_base58_string(keypair_base58)
+                else:
+                    self.keypair = Keypair.from_bytes(decoded[:32])
             else:
-                # Fallback to bytes if not string
+                # Handle byte input
+                if len(keypair_base58) != 32:
+                    raise ValueError("Keypair bytes must be 32 bytes long")
                 self.keypair = Keypair.from_bytes(keypair_base58)
+                
         except Exception as e:
             logging.error(f"Failed to initialize keypair: {str(e)}")
-            raise ValueError("Invalid keypair format")
+            raise ValueError(f"Invalid keypair format: {str(e)}")
 
     def get_balance(self):
         return self.client.get_balance(self.keypair.public_key)
