@@ -7,6 +7,7 @@ from solders.transaction import Transaction
 from solders.keypair import Keypair
 from solders.message import Message
 from solders.hash import Hash
+from solders.pubkey import Pubkey as PublicKey
 
 class TestSolanaPay(unittest.TestCase):
     def setUp(self):
