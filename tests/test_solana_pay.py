@@ -18,15 +18,17 @@ class TestSolanaPay(unittest.TestCase):
         self.assertEqual(balance["result"]["value"], 1000000)
 
     @patch('solana_pay.Client')
-    def test_send_payment(self, mock_client):
+    def test_process_payment(self, mock_client):
+        mock_client.return_value.get_balance.return_value = {
+            "result": {"value": 1000000}
+        }
         mock_client.return_value.send_transaction.return_value = {
-            "result": "success",
-            "signature": "test_signature"
+            "result": "test_signature"
         }
         
-        result = self.solana_pay.send_payment("recipient", 100)
-        self.assertEqual(result["result"], "success")
-        self.assertEqual(result["signature"], "test_signature")
+        success, result = self.solana_pay.process_payment(100)
+        self.assertTrue(success)
+        self.assertEqual(result, "test_signature")
 
 if __name__ == '__main__':
     unittest.main()
