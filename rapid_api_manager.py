@@ -5,11 +5,17 @@ import logging
 
 load_dotenv()
 
+import time
+from collections import defaultdict
+
 class RapidAPIManager:
     def __init__(self):
         self.api_key = os.getenv('RAPIDAPI_KEY')
         if not self.api_key:
             raise ValueError("RAPIDAPI_KEY not found in environment variables")
+        
+        self.last_request_time = defaultdict(float)
+        self.request_interval = 1.0  # Minimum seconds between requests
             
         self.apis = {
             'personator': {
@@ -31,12 +37,22 @@ class RapidAPIManager:
             'scraper': {
                 'host': 'scrapeninja.p.rapidapi.com',
                 'base_url': 'https://scrapeninja.p.rapidapi.com'
+            },
+            'virtual-number': {
+                'host': 'virtual-phone-number.p.rapidapi.com',
+                'base_url': 'https://virtual-phone-number.p.rapidapi.com'
             }
         }
     
     def get_headers(self, api_name):
         if api_name not in self.apis:
             raise ValueError(f"Unknown API: {api_name}")
+            
+        # Rate limiting
+        current_time = time.time()
+        if current_time - self.last_request_time[api_name] < self.request_interval:
+            time.sleep(self.request_interval)
+        self.last_request_time[api_name] = current_time
             
         return {
             'X-RapidAPI-Key': self.api_key,
