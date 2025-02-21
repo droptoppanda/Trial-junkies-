@@ -21,10 +21,11 @@ class SolanaPay:
                 raise ValueError("Keypair cannot be empty")
                 
             if isinstance(keypair_base58, str):
-                # Try to create keypair directly from base58 string
-                self.keypair = Keypair.from_base58_string(keypair_base58)
+                # Convert base58 string to bytes and create keypair
+                decoded = base58.b58decode(keypair_base58)[:32]  # Ensure 32 bytes
+                self.keypair = Keypair.from_bytes(decoded)
             else:
-                # For testing, generate a new keypair if bytes are provided
+                # For testing, generate a new keypair
                 self.keypair = Keypair()
                 
         except Exception as e:
