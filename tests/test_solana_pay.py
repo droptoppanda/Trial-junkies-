@@ -33,6 +33,9 @@ class TestSolanaPay(unittest.TestCase):
         mock_client_instance.get_balance.return_value = {
             "result": {"value": 1000000}
         }
+        mock_client_instance.get_recent_blockhash.return_value = {
+            "result": {"value": {"blockhash": "test_blockhash"}}
+        }
         mock_client_instance.send_transaction.return_value = {
             "result": "test_signature"
         }
@@ -47,6 +50,7 @@ class TestSolanaPay(unittest.TestCase):
         # Set the mock client on the test instance
         self.solana_pay.client = mock_client_instance
         
+        # Test payment processing
         success, result = self.solana_pay.process_payment(100)
         self.assertTrue(success)
         self.assertEqual(result, "test_signature")

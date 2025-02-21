@@ -65,32 +65,27 @@ class SolanaPay:
             return False, str(e)
 
     def create_payment(self, amount, recipient):
-        # Get recent blockhash
-        recent_blockhash = self.client.get_recent_blockhash()['result']['value']['blockhash']
-        
-        # Create transfer instruction
-        transfer_params = TransferParams(
-            from_pubkey=self.keypair.pubkey,
-            to_pubkey=PublicKey(recipient),
-            lamports=amount
-        )
-        
-        # Create message with instruction
-        message = Message.new_with_blockhash(
-            [transfer(transfer_params)],
-            self.keypair.pubkey,
-            recent_blockhash
-        )
-        
-        # Create and sign transaction
-        transaction = Transaction(
-            from_keypairs=[self.keypair],
-            message=message,
-            recent_blockhash=recent_blockhash
-        )
-        transaction.sign([self.keypair])
-        
-        return transaction
+        try:
+            # Get recent blockhash
+            recent_blockhash = self.client.get_recent_blockhash()['result']['value']['blockhash']
+            
+            # Create transfer instruction
+            transfer_params = TransferParams(
+                from_pubkey=self.keypair.pubkey(),
+                to_pubkey=PublicKey.from_string(recipient),
+                lamports=amount
+            )
+            
+            # Create transaction
+            transaction = Transaction()
+            transaction.add(transfer(transfer_params))
+            transaction.recent_blockhash = recent_blockhash
+            transaction.sign(self.keypair)
+            
+            return transaction
+        except Exception as e:
+            logging.error(f"Error creating payment: {str(e)}")
+            raise
 
     def verify_payment(self, transaction_id):
         try:
