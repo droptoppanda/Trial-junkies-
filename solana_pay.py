@@ -8,10 +8,11 @@ from solders.keypair import Keypair
 import base58
 
 class SolanaPay:
-    def __init__(self, endpoint, keypair_base58, test_mode=False):
+    def __init__(self, endpoint, keypair_base58):
         self.client = Client(endpoint)
         try:
-            if test_mode:
+            if os.getenv('TESTING') == 'true':
+                # Use deterministic test keypair
                 self.keypair = Keypair()
                 return
                 
