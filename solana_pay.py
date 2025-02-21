@@ -9,9 +9,16 @@ import base58
 class SolanaPay:
     def __init__(self, endpoint, keypair_base58):
         self.client = Client(endpoint)
-        # Convert base58 string to keypair properly
-        seed_bytes = base58.b58decode(keypair_base58)
-        self.keypair = Keypair.from_bytes(seed_bytes)
+        try:
+            if isinstance(keypair_base58, str):
+                # First try direct from base58 secret key
+                self.keypair = Keypair.from_base58_string(keypair_base58)
+            else:
+                # Fallback to bytes if not string
+                self.keypair = Keypair.from_bytes(keypair_base58)
+        except Exception as e:
+            logging.error(f"Failed to initialize keypair: {str(e)}")
+            raise ValueError("Invalid keypair format")
 
     def get_balance(self):
         return self.client.get_balance(self.keypair.public_key)
