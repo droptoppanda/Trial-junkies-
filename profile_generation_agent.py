@@ -24,9 +24,17 @@ class ProfileGenerationAgent:
         if os.getenv('TESTING') == 'true':
             return self._get_mock_test_profile()
             
-        # Return generated data if all required fields are present
-        if all([person_data, email, phone, card]):
-            return {
+        # Always return a profile, using fallbacks if needed
+        if not person_data:
+            person_data = credential_agent._get_mock_person()
+        if not email:
+            email = credential_agent._get_mock_email()
+        if not phone:
+            phone = credential_agent._get_mock_phone()
+        if not card:
+            card = credential_agent._get_mock_card()
+            
+        return {
                 "name": person_data['name'],
                 "address": person_data['address'],
                 "email": email,

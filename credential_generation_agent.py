@@ -55,8 +55,8 @@ class CredentialGenerationAgent:
             logging.warning(f"Personator API Error: Status {response.status_code}, using fallback")
             return self._get_mock_person()
         except Exception as e:
-            logging.error(f"Person generation failed: {str(e)}")
-            return None
+            logging.warning(f"Person generation failed: {str(e)}, using fallback")
+            return self._get_mock_person()
         
     def generate_email(self):
         try:
@@ -72,8 +72,8 @@ class CredentialGenerationAgent:
             logging.warning(f"Email API Error: Status {response.status_code}, using fallback")
             return self._get_mock_email()
         except Exception as e:
-            logging.error(f"Email generation failed: {str(e)}")
-            return None
+            logging.warning(f"Email generation failed: {str(e)}, using fallback")
+            return self._get_mock_email()
 
     def generate_phone(self):
         try:

@@ -65,16 +65,8 @@ def main():
 
         # Generate credentials
         email = credential_generation_agent.generate_email()
-        if not email:
-            raise ValueError("Failed to generate email")
-            
         phone = credential_generation_agent.generate_phone()
-        if not phone:
-            raise ValueError("Failed to generate phone")
-            
         card = credential_generation_agent.generate_card()
-        if not card:
-            raise ValueError("Failed to generate card")
 
         # Generate profile
         profile = profile_generation_agent.generate_profile()
