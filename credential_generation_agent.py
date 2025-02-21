@@ -71,7 +71,7 @@ class CredentialGenerationAgent:
     def generate_card(self):
         try:
             url = "https://fake-valid-cc-data-generator.p.rapidapi.com/card"
-            headers = self.api_manager.get_headers('fake-valid-cc-data-generator')
+            headers = self.api_manager.get_headers('card_generator')
             response = requests.get(url, headers=headers, timeout=10)
             if response.status_code == 200:
                 return response.json().get("card_number")
