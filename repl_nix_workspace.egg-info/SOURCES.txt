@@ -6,8 +6,14 @@ repl_nix_workspace.egg-info/dependency_links.txt
 repl_nix_workspace.egg-info/requires.txt
 repl_nix_workspace.egg-info/top_level.txt
 tests/test_credential_generation_agent.py
+tests/test_env_loader.py
 tests/test_form_filler_scraper_agent.py
+tests/test_gemini_agent.py
 tests/test_mock_credentials.py
 tests/test_profile_generation_agent.py
+tests/test_proxy_agent.py
 tests/test_role_management.py
+tests/test_solana_pay.py
 tests/test_trial_execution_agent.py
+tests/test_trial_request_agent.py
+tests/test_verification_agent.py
