@@ -1,6 +1,6 @@
 import os
 import logging
-from solders.rpc import Client
+from solders.rpc.client import Client
 from solders.transaction import Transaction
 from solders.message import Message
 from solders.system_program import TransferParams, transfer
