@@ -25,6 +25,16 @@ API_KEY=your_api_key_here
 DATABASE_URL=your_database_url_here
 ```
 
+## Environment Variables
+
+The following environment variables need to be set in the `.env` file:
+
+- `RAPIDAPI_KEY`: Your RapidAPI key.
+- `WALLET_KEYPAIR`: Your wallet keypair.
+- `SOLANA_ENDPOINT`: The Solana endpoint URL.
+- `DISCORD_BOT_TOKEN`: Your Discord bot token.
+- `GEMINI_API_KEY`: Your Gemini API key.
+
 ### Usage
 
 To start the application, run:
