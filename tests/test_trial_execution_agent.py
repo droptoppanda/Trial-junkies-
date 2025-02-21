@@ -24,16 +24,22 @@ class TestTrialExecutionAgent(unittest.TestCase):
         
         # Configure WebDriverWait mock to return our mocked elements
         mock_wait_instance = MagicMock()
+        # Set up complete mocking
         mock_wait_instance.until.side_effect = [mock_input, mock_form]
         mock_wait.return_value = mock_wait_instance
         
-        # Mock successful navigation
+        # Mock successful form submission and navigation
         mock_driver.current_url = "http://example.com/success"
+        mock_form.submit.return_value = None
         
-        profile = {"name": "John Doe", "trial_created": True}
-        form_fields = {"name": "John Doe"}
-        
-        result = self.agent.execute_trial(profile, form_fields)
+        # Mock verification agent
+        with patch('trial_execution_agent.VerificationAgent') as mock_verify:
+            mock_verify.return_value.verify_trial_creation.return_value = True
+            
+            profile = {"name": "John Doe", "trial_created": True}
+            form_fields = {"name": "John Doe"}
+            
+            result = self.agent.execute_trial(profile, form_fields)
         self.assertEqual(result["status"], "success")
 
 if __name__ == '__main__':
