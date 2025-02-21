@@ -29,7 +29,7 @@ class ProfileGenerationAgent:
             return {
                 "name": person_data['name'],
                 "address": person_data['address'],
-                "email": profile_email,
+                "email": email,
                 "phone": phone,
                 "card": card,
                 "city": person_data['city'],

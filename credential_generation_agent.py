@@ -85,11 +85,11 @@ class CredentialGenerationAgent:
                 data = response.json()
                 if isinstance(data, list) and len(data) > 0:
                     return data[0].get("phoneNumber")
-            logging.error(f"Phone API Error: Status {response.status_code}")
-            return "123-456-7890"  # Fallback value
+            logging.warning(f"Phone API Error: Status {response.status_code}, using fallback")
+            return self._get_mock_phone()
         except Exception as e:
-            logging.error(f"Phone generation failed: {str(e)}")
-            return "123-456-7890"  # Fallback value for exceptions too
+            logging.warning(f"Phone generation failed: {str(e)}, using fallback")
+            return self._get_mock_phone()
 
     def generate_card(self):
         try:
@@ -98,8 +98,8 @@ class CredentialGenerationAgent:
             response = requests.get(url, headers=headers, timeout=10)
             if response.status_code == 200:
                 return response.json().get("card_number")
-            logging.error(f"Card API Error: Status {response.status_code}")
-            return "4111-1111-1111-1111"  # Fallback value
+            logging.warning(f"Card API Error: Status {response.status_code}, using fallback")
+            return self._get_mock_card()
         except Exception as e:
-            logging.error(f"Card generation failed: {str(e)}")
-            return None
+            logging.warning(f"Card generation failed: {str(e)}, using fallback")
+            return self._get_mock_card()
