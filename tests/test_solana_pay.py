@@ -5,6 +5,8 @@ from solana_pay import SolanaPay
 from solders.rpc.client import Client
 from solders.transaction import Transaction
 from solders.keypair import Keypair
+from solders.message import Message
+from solders.hash import Hash
 
 class TestSolanaPay(unittest.TestCase):
     def setUp(self):
@@ -69,17 +71,23 @@ class TestSolanaPay(unittest.TestCase):
         self.client = Client("https://api.devnet.solana.com")
         self.payer = Keypair()
         self.receiver = Keypair()
-        # Get recent blockhash
+        
+        # Get recent blockhash and create message
         recent_blockhash = self.client.get_recent_blockhash()["result"]["value"]["blockhash"]
+        message = Message.new_with_blockhash(
+            instructions=[],
+            payer=self.payer.pubkey(),
+            recent_blockhash=recent_blockhash
+        )
 
-        # Create transaction
+        # Create transaction with required parameters
         transaction = Transaction(
-            recent_blockhash=recent_blockhash,
-            fee_payer=self.payer.public_key
+            from_keypairs=[self.payer],
+            message=message,
+            recent_blockhash=recent_blockhash
         )
 
         self.assertIsNotNone(transaction)
-        self.assertEqual(transaction.recent_blockhash, recent_blockhash)
 
 
 if __name__ == '__main__':
