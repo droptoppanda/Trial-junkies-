@@ -1,7 +1,8 @@
 import os
 import logging
 from solana.rpc.api import Client
-from solders.transaction import Transaction 
+from solders.transaction import Transaction
+from solders.message import Message
 from solders.system_program import TransferParams, transfer
 from solders.pubkey import Pubkey as PublicKey
 from solders.keypair import Keypair
@@ -72,12 +73,18 @@ class SolanaPay:
             to_pubkey=PublicKey(recipient),
             lamports=amount
         )
-        transfer_ix = transfer(transfer_params)
         
-        # Create transaction with all required parameters
+        # Create message with instruction
+        message = Message.new_with_blockhash(
+            [transfer(transfer_params)],
+            self.keypair.pubkey,
+            recent_blockhash
+        )
+        
+        # Create transaction with message
         transaction = Transaction(
             from_keypairs=[self.keypair],
-            message=transfer_ix,
+            message=message,
             recent_blockhash=recent_blockhash
         )
         
