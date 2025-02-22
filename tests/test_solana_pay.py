@@ -2,7 +2,7 @@ import os
 import unittest
 from unittest.mock import patch, MagicMock
 from solana_pay import SolanaPay
-from solders.rpc.api import Client
+from solders.rpc import Client
 from solders.transaction import Transaction
 from solders.keypair import Keypair
 from solders.message import Message
