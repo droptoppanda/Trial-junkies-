@@ -35,3 +35,10 @@ class TrialRequestAgent:
         except Exception as e:
             logging.error(f"Trial request failed: {str(e)}")
             return False, str(e)
+            
+    def get_trial_info(self):
+        """Get trial information for the platform."""
+        response = requests.get(f"https://api.{self.platform}/trial-info")
+        if response.status_code == 200:
+            return response.json()
+        return None
