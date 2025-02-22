@@ -48,7 +48,12 @@ class SolanaPay:
             raise ValueError(f"Invalid keypair format: {str(e)}")
 
     def get_balance(self):
-        return self.client.get_balance(self.keypair.pubkey())
+        try:
+            response = self.client.get_balance(self.keypair.pubkey())
+            return response
+        except Exception as e:
+            logger.error(f"Error getting balance: {str(e)}")
+            raise
 
     def process_payment(self, amount):
         try:

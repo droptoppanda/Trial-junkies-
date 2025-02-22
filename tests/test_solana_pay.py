@@ -11,9 +11,11 @@ class TestSolanaPay(unittest.TestCase):
 
     @patch('solana_pay.Client')
     def test_get_balance(self, mock_client):
+        mock_instance = MagicMock()
         mock_response = MagicMock()
         mock_response.value = 1000000
-        mock_client.return_value.get_balance.return_value = mock_response
+        mock_instance.get_balance.return_value = mock_response
+        mock_client.return_value = mock_instance
 
         balance = self.solana_pay.get_balance()
         self.assertEqual(balance.value, 1000000)
