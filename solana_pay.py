@@ -79,15 +79,14 @@ class SolanaPay:
     def create_payment(self, amount, recipient):
         try:
             recent_blockhash = self.client.get_latest_blockhash().value.blockhash
-            transfer_params = TransferParams(
-                from_pubkey=self.keypair.pubkey,
-                to_pubkey=PublicKey(recipient),
-                lamports=amount
-            )
+            transfer_params = {
+                "from_pubkey": self.keypair.pubkey(),
+                "to_pubkey": PublicKey.from_string(recipient),
+                "lamports": amount
+            }
             transfer_ix = transfer(transfer_params)
             transaction = Transaction()
             transaction.add(transfer_ix)
-            transaction.recent_blockhash = recent_blockhash
             transaction.sign(self.keypair)
             return transaction
         except Exception as e:
@@ -118,14 +117,15 @@ class SolanaPay:
     def create_transaction(self, payer: Keypair, receiver: Keypair, amount: float):
         try:
             recent_blockhash = self.client.get_latest_blockhash().value.blockhash
-            transfer_params = TransferParams(
-                from_pubkey=payer.pubkey,
-                to_pubkey=receiver.pubkey,
-                lamports=amount
-            )
+            transfer_params = {
+                "from_pubkey": payer.pubkey(),
+                "to_pubkey": receiver.pubkey(),
+                "lamports": amount
+            }
             transfer_ix = transfer(transfer_params)
-            transaction = Transaction().add(transfer_ix)
-            transaction.sign([payer])
+            transaction = Transaction()
+            transaction.add(transfer_ix)
+            transaction.sign(payer)
             return transaction
         except Exception as e:
             logger.error(f"Error creating transaction: {str(e)}")
