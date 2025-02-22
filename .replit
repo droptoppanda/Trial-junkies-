@@ -4,7 +4,7 @@ modules = ["python-3.12", "nix"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Run"
+runButton = "Test"
 
 [[workflows.workflow]]
 name = "Run Bot"
