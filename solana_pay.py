@@ -66,7 +66,11 @@ class SolanaPay:
             if amount <= 0:
                 return False, "Invalid payment amount"
 
-            recipient = self.keypair.pubkey()
+            # Use a different recipient for testing
+            if os.getenv('TESTING') == 'true':
+                recipient = PublicKey.new_unique()
+            else:
+                recipient = self.keypair.pubkey()
             transaction = self.create_payment(amount, str(recipient))
             response = self.client.send_transaction(transaction)
 
