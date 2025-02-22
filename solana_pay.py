@@ -107,13 +107,10 @@ class SolanaPay:
                 recent_blockhash=recent_blockhash
             )
             
-            # Create and sign transaction
-            transaction = Transaction.new_signed_with_payer(
-                instructions=[transfer_ix],
-                payer=self.keypair.pubkey(),
-                signers=[self.keypair],
-                recent_blockhash=recent_blockhash
-            )
+            # Create transaction with payer and blockhash
+            transaction = Transaction().add(transfer_ix)
+            transaction.sign(self.keypair)
+            transaction.recent_blockhash = recent_blockhash
             
             return transaction
         except Exception as e:
