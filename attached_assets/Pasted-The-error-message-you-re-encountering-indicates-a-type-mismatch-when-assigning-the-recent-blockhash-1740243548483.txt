@@ -1,0 +1,54 @@
+The error message you're encountering indicates a type mismatch when assigning the `recent_blockhash` to a `Transaction` object in the `solana-py` library. This issue arises because the `Transaction` class expects a `Hash` object for the `recent_blockhash` attribute, but it's receiving a `bytes` object instead.
+
+**Understanding the Issue:**
+
+In recent versions of `solana-py`, particularly from v0.36.0 onwards, there's been a transition to using the `solders` library for certain data structures, including `Transaction` and `Hash`. This change means that when constructing transactions, the `recent_blockhash` must be of the `solders.hash.Hash` type. If a `bytes` object is provided instead, it leads to the conversion error you're seeing.
+
+**Recommended Solution:**
+
+To resolve this issue, ensure that you're using the `Transaction` class from the `solders.transaction` module and that the `recent_blockhash` is appropriately converted to a `solders.hash.Hash` object. Here's how you can modify your code:
+
+1. **Import the Necessary Modules:**
+
+   ```python
+   from solders.transaction import Transaction
+   from solders.hash import Hash
+   ```
+
+
+2. **Fetch the Latest Blockhash:**
+
+   ```python
+   blockhash_resp = await client.get_latest_blockhash()
+   recent_blockhash = blockhash_resp.value.blockhash
+   ```
+
+
+3. **Convert the Blockhash to `Hash` Type:**
+
+   ```python
+   recent_blockhash = Hash.from_string(recent_blockhash)
+   ```
+
+
+4. **Create the Transaction:**
+
+   ```python
+   transaction = Transaction(recent_blockhash=recent_blockhash)
+   # Add your instructions to the transaction here
+   ```
+
+
+By ensuring that both the `Transaction` and `Hash` classes are imported from `solders`, and converting the `recent_blockhash` to the correct type, you can prevent the type conversion error.
+
+**Additional Considerations:**
+
+- **Library Version:** Ensure that you're using a compatible version of `solana-py` that integrates with `solders`. Versions from v0.36.0 onwards have this integration.
+
+- **Dependencies:** If you're using other libraries or modules that depend on `solana-py`, verify that they're compatible with the version you're using, especially after the transition to `solders`.
+
+For more detailed discussions and community insights related to this issue, you can refer to the following GitHub issue:
+
+- ["cannot convert 'Transaction' object to bytes" Issue #457](https://github.com/michaelhly/solana-py/issues/457)
+
+By following these steps and ensuring type compatibility, you should be able to resolve the error and successfully process payments using the `solana-py` library. 
