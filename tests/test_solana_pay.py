@@ -11,7 +11,7 @@ class TestSolanaPay(unittest.TestCase):
     def setUp(self):
         os.environ['TESTING'] = 'true'
         test_keypair = "4NMwxzFrpZQVX9sXZwSvSD8CX6WdZheQh7hXCFAEYQm"
-        self.solana_pay = SolanaPay("test_endpoint", test_keypair)
+        self.solana_pay = SolanaPay("https://api.devnet.solana.com", test_keypair)
         del os.environ['TESTING']
 
     @patch('solana_pay.Client')
