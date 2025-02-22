@@ -1,0 +1,36 @@
+The error message `ModuleNotFoundError: No module named 'solana.transaction'` indicates that your code is attempting to import the `Transaction` class from a module path that doesn't exist in the current version of the `solana` Python package. This issue often arises due to changes in module paths between different versions of the package.
+
+**Potential Solutions:**
+
+1. **Adjust Import Statements Based on Version:**
+   - **For `solana` Version 0.34.3 and Earlier:**
+     - The `Transaction` class is located in `solana.transaction`.
+     - Use the import statement: `from solana.transaction import Transaction`.
+   - **For `solana` Version 0.35.0 and Later:**
+     - The `Transaction` class has been moved, and the package now relies on the `solders` library for core types.
+     - Use the import statement: `from solders.transaction import Transaction`.
+
+2. **Ensure Consistent Package Versions:**
+   - Verify that all dependencies are compatible with each other.
+   - If you're using `solana` version 0.35.0 or later, ensure that the `solders` package is installed and up to date.
+   - If your project relies on the module structure of `solana` version 0.34.3 or earlier, consider downgrading to a compatible version by running:
+     ```
+     pip install solana==0.34.3
+     ```
+
+**Recommended Steps:**
+
+1. **Check Your Current `solana` Package Version:**
+   - In your Python environment, execute:
+     ```python
+     import solana
+     print(solana.__version__)
+     ```
+   - This will display the installed version of the `solana` package.
+
+2. **Modify Import Statements Accordingly:**
+   - Based on the version identified:
+     - If you're using version 0.34.3 or earlier, ensure your import statements align with that version's module structure.
+     - If you're using version 0.35.0 or later, update your import statements to reflect the new module paths, incorporating the `solders` package as needed.
+
+By aligning your import statements with the correct module paths corresponding to your installed `solana` package version, you can resolve the `ModuleNotFoundError` and ensure your code functions as intended. 
