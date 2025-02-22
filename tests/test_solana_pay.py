@@ -16,26 +16,28 @@ class TestSolanaPay(unittest.TestCase):
         mock_response.value = 1000000
         mock_instance.get_balance.return_value = mock_response
         mock_client.return_value = mock_instance
+        self.solana_pay.client = mock_instance  # Set the mocked client directly
 
         balance = self.solana_pay.get_balance()
         self.assertEqual(balance.value, 1000000)
 
     @patch('solana_pay.Client')
     def test_process_payment(self, mock_client):
+        mock_instance = MagicMock()
         # Mock balance check
         mock_balance = MagicMock()
         mock_balance.value = 1000000
-        mock_client.return_value.get_balance.return_value = mock_balance
+        mock_instance.get_balance.return_value = mock_balance
 
         # Mock blockhash
         mock_blockhash = MagicMock()
         mock_blockhash.value.blockhash = bytes([0] * 32)
-        mock_client.return_value.get_latest_blockhash.return_value = mock_blockhash
+        mock_instance.get_latest_blockhash.return_value = mock_blockhash
 
         # Mock transaction
         mock_tx = MagicMock()
         mock_tx.value = "test_signature"
-        mock_client.return_value.send_transaction.return_value = mock_tx
+        mock_instance.send_transaction.return_value = mock_tx
 
         # Mock confirmation
         mock_confirm = MagicMock()
@@ -44,7 +46,10 @@ class TestSolanaPay(unittest.TestCase):
             "transaction": {"signatures": ["test_signature"]},
             "confirmations": 1
         }
-        mock_client.return_value.get_confirmed_transaction.return_value = mock_confirm
+        mock_instance.get_confirmed_transaction.return_value = mock_confirm
+        
+        mock_client.return_value = mock_instance
+        self.solana_pay.client = mock_instance  # Set the mocked client directly
 
         success, result = self.solana_pay.process_payment(100)
         self.assertTrue(success)
