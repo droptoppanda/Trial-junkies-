@@ -17,8 +17,14 @@ logger = logging.getLogger(__name__)
 
 class SolanaPay:
     def __init__(self, endpoint="https://api.devnet.solana.com", keypair_base58=None):
-        self.client = Client(endpoint)
-        logger.info(f"Initialized Solana client with endpoint: {endpoint}")
+        try:
+            self.client = Client(endpoint)
+            # Verify connection
+            self.client.get_version()
+            logger.info(f"Initialized Solana client with endpoint: {endpoint}")
+        except Exception as e:
+            logger.error(f"Failed to initialize Solana client: {str(e)}")
+            raise RuntimeError(f"Solana client initialization failed. Please verify package compatibility: {str(e)}")
         try:
             if os.getenv('TESTING') == 'true':
                 self.keypair = Keypair()
