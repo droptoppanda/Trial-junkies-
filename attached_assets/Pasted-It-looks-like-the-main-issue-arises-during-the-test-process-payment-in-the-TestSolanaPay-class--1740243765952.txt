@@ -1,0 +1,91 @@
+It looks like the main issue arises during the `test_process_payment` in the `TestSolanaPay` class, where an error occurs with the blockhash argument being passed incorrectly. The specific error is:
+
+```
+ERROR:solana_pay:Error creating payment: argument 'blockhash': 'bytes' object cannot be converted to 'Hash'
+```
+
+Here's how you can troubleshoot and potentially fix this issue:
+
+### Steps to Troubleshoot
+
+1. **Verify Blockhash Type**: Ensure that when you retrieve or set the blockhash for the transaction, it is in the correct format. The blockhash should be a `Hash` type, not a `bytes` object. You can convert a `bytes` object to `Hash` as follows:
+
+   ```python
+   from solana.rpc.types import TxOpts
+   from solana.rpc.api import Client
+
+   # Assume blockhash_bytes is your bytes object
+   blockhash_hash = Hash(blockhash_bytes)
+   ```
+
+2. **Check the Payment Processing Code**: Review the code where the payment is being processed. Make sure that you are obtaining the latest blockhash from the Solana cluster properly and that it is being used in the transaction. Here’s an example of how to do this:
+
+   ```python
+   # Getting the latest blockhash
+   response = solana_client.get_recent_blockhash()
+   blockhash = response['result']['value']['blockhash']
+   ```
+
+3. **Inspect the Transaction Structure**: Ensure that the transaction structure is being built correctly and that all necessary parameters are included. Here's a basic example:
+
+   ```python
+   from solana.transaction import Transaction
+   from solana.system_program import transfer
+
+   transaction = Transaction()
+   transaction.add(transfer(
+       TransferParams(
+           from_pubkey=from_keypair.public_key,
+           to_pubkey=to_public_key,
+           lamports=amount,
+       )
+   ))
+   transaction.recent_blockhash = blockhash_hash  # Ensure this is of type Hash
+   ```
+
+4. **Check for Additional Errors**: Look at any additional logs or error messages that might provide further insights. The warnings related to API failures for generating emails, phone numbers, or cards may also suggest issues with API limits or misconfigurations.
+
+5. **Review the Test Case**: Ensure that your test case is correctly setting up the required conditions for a successful payment process. Check if any mocked dependencies or configurations are causing the test to fail.
+
+### Example Fix
+
+Here’s a revised example of how you might structure your payment processing to avoid the blockhash type issue:
+
+```python
+from solana.rpc.api import Client
+from solana.rpc.types import TxOpts, Hash
+
+# Initialize client
+solana_client = Client("https://api.devnet.solana.com")
+
+# Create a function to process payments
+def process_payment(from_keypair, to_public_key, amount):
+    # Get the latest blockhash
+    response = solana_client.get_recent_blockhash()
+    blockhash = response['result']['value']['blockhash']
+    
+    # Ensure blockhash is a Hash type
+    blockhash_hash = Hash(blockhash)
+
+    # Create a transfer instruction
+    transfer_instruction = transfer(
+        TransferParams(
+            from_pubkey=from_keypair.public_key,
+            to_pubkey=to_public_key,
+            lamports=amount,
+        )
+    )
+
+    # Create a transaction
+    transaction = Transaction()
+    transaction.add(transfer_instruction)
+    transaction.recent_blockhash = blockhash_hash  # Use the correct blockhash type
+
+    # Sign and send the transaction
+    response = solana_client.send_transaction(transaction, from_keypair)
+    return response
+```
+
+### Conclusion
+
+After making these changes, rerun your tests. If the payment processing issue persists, please share the specific code for your payment processing function, and we can further debug the problem.
