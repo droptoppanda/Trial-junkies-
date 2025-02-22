@@ -53,7 +53,7 @@ class SolanaPay:
     def process_payment(self, amount):
         try:
             balance = self.get_balance()
-            balance_value = balance.get('result', {}).get('value', 0)
+            balance_value = balance.value
 
             if balance_value < amount:
                 return False, "Insufficient balance"
@@ -61,18 +61,18 @@ class SolanaPay:
             if amount <= 0:
                 return False, "Invalid payment amount"
 
-            recipient = self.keypair.pubkey
+            recipient = self.keypair.pubkey()
             transaction = self.create_payment(amount, str(recipient))
             response = self.client.send_transaction(transaction)
 
-            if not response or 'result' not in response:
+            if not response or not response.value:
                 return False, "Transaction failed"
 
-            verification = self.verify_payment(response['result'])
+            verification = self.verify_payment(response.value)
             if not verification:
                 return False, "Payment verification failed"
 
-            return True, response['result']
+            return True, response.value
         except Exception as e:
             logger.error(f"Payment processing error: {str(e)}")
             return False, str(e)

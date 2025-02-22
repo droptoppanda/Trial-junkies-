@@ -29,25 +29,22 @@ class TestSolanaPay(unittest.TestCase):
     @patch('solana_pay.Client')
     def test_process_payment(self, mock_client):
         mock_client_instance = mock_client.return_value
-        mock_client_instance.get_balance.return_value = {
-            "result": {"value": 1000000}
-        }
+        mock_client_instance.get_balance.return_value.value = 1000000
 
         mock_response = MagicMock()
-        mock_response.value.blockhash = "test_blockhash"
+        mock_response.value.blockhash = bytes([0] * 32)
         mock_client_instance.get_latest_blockhash.return_value = mock_response
 
-        mock_client_instance.send_transaction.return_value = {
-            "result": "test_signature"
-        }
+        mock_client_instance.send_transaction.return_value = MagicMock()
+        mock_client_instance.send_transaction.return_value.value = "test_signature"
 
-        mock_client_instance.get_confirmed_transaction.return_value = {
-            "result": {
-                "meta": {"err": None},
-                "transaction": {"signatures": ["test_signature"]},
-                "confirmations": 1
-            }
+        mock_confirmed_tx = MagicMock()
+        mock_confirmed_tx.value = {
+            "meta": {"err": None},
+            "transaction": {"signatures": ["test_signature"]},
+            "confirmations": 1
         }
+        mock_client_instance.get_confirmed_transaction.return_value = mock_confirmed_tx
 
         self.solana_pay.client = mock_client_instance
 
