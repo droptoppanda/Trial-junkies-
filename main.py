@@ -9,12 +9,15 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 def install_dependencies():
     packages = [
-        'requests', 'discord-py', 'google-generativeai', 'python-dotenv',
-        'selenium', 'solana', 'web3', 'rapid-api-client'
+        'asyncio', 'base58', 'discord-py', 'google-generativeai',
+        'python-dotenv', 'rapid-api-client', 'requests', 'selenium',
+        'solana', 'solders', 'web3', 'webdriver-manager'
     ]
+    
     for package in packages:
         try:
-            subprocess.run(['upm', 'add', package], check=True)
+            subprocess.run(['pip', 'install', '--no-cache-dir', package], check=True)
+            logging.info(f"Successfully installed {package}")
         except subprocess.CalledProcessError as e:
             logging.error(f"Failed to install {package}: {e}")
             raise
