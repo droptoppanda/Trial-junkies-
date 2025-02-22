@@ -1,0 +1,55 @@
+I'm sorry to hear you're still encountering module import issues. Let's explore some alternative approaches to resolve this:
+
+1. **Use `solana-py` Exclusively:**
+   The `solana-py` library has integrated many functionalities from `solders`, allowing you to interact with the Solana blockchain without directly importing from `solders`. For instance, you can import the `Client` class directly from `solana.rpc.api`:
+
+   ```python
+   from solana.rpc.api import Client
+   ```
+
+
+   This approach simplifies your imports and reduces potential conflicts. Ensure you have the latest version of `solana-py` installed:
+
+   ```bash
+   pip install --upgrade solana
+   ```
+
+
+2. **Align `solders` Version with `solana-py`:**
+   If your project requires direct use of `solders`, it's crucial to match its version with the one expected by `solana-py`. As of `solana-py` version 0.36.5, it requires `solders` version between 0.23 and 0.26. To install a compatible version, run:
+
+   ```bash
+   pip install "solders>=0.23,<0.26"
+   ```
+
+
+   After installation, verify the version with:
+
+   ```bash
+   pip show solders
+   ```
+
+
+   This ensures that the installed `solders` version aligns with `solana-py`'s requirements.
+
+3. **Check for Naming Conflicts:**
+   Ensure that your project files or directories are not named `solana.py` or `solders.py`, as this can cause Python to import your local modules instead of the installed packages. Rename any such files or directories to avoid this conflict.
+
+4. **Verify Your Python Environment:**
+   It's possible that multiple Python environments or virtual environments are causing conflicts. Ensure you're installing and importing packages within the same environment. You can check the Python interpreter being used by running:
+
+   ```bash
+   which python
+   ```
+
+
+   And verify the installed packages with:
+
+   ```bash
+   pip list
+   ```
+
+
+   This helps confirm that your environment is set up correctly.
+
+By following these steps, you should be able to resolve the import issues. If problems persist, consider creating a fresh virtual environment and reinstalling the necessary packages to ensure a clean setup. 
