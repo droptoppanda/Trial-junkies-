@@ -3,6 +3,11 @@ import logging
 import os
 import subprocess
 from dotenv import load_dotenv
+from typing import Dict, Optional
+
+# Global variables
+wallet_endpoint: Optional[str] = None
+wallet_keypair: Optional[str] = None
 
 # Set up logging first
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
