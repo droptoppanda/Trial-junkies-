@@ -14,13 +14,13 @@ def install_dependencies():
         'solana', 'solders', 'web3', 'webdriver-manager'
     ]
     
-    for package in packages:
-        try:
-            subprocess.run(['pip', 'install', '--no-cache-dir', package], check=True)
-            logging.info(f"Successfully installed {package}")
-        except subprocess.CalledProcessError as e:
-            logging.error(f"Failed to install {package}: {e}")
-            raise
+    try:
+        package_list = ' '.join(packages)
+        subprocess.run(['upm', 'add'] + packages, check=True)
+        logging.info("Successfully installed all packages")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Failed to install packages: {e}")
+        raise
 
 # Install dependencies before imports
 install_dependencies()
