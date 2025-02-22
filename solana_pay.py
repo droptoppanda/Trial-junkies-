@@ -3,10 +3,10 @@ import os
 import logging
 import base58
 from solana.rpc.api import Client
-from solana.transaction import Transaction
-from solana.system_program import transfer, TransferParams
-from solana.keypair import Keypair
-from solana.publickey import PublicKey
+from solders.transaction import Transaction
+from solders.system_program import transfer, TransferParams
+from solders.keypair import Keypair
+from solders.pubkey import Pubkey as PublicKey
 
 # Configure logging
 logging.basicConfig(
