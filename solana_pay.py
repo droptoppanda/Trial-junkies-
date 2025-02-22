@@ -108,9 +108,11 @@ class SolanaPay:
             )
             
             # Create and sign transaction
-            transaction = Transaction.new_from_message(
-                message=message,
-                payer_signer=self.keypair
+            transaction = Transaction.new_signed_with_payer(
+                instructions=[transfer_ix],
+                payer=self.keypair.pubkey(),
+                signers=[self.keypair],
+                recent_blockhash=recent_blockhash
             )
             
             return transaction
