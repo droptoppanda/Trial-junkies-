@@ -1,77 +1,85 @@
-# Trial-junkies-
 
-## Documentation
+# Trial-junkies
 
-### Installation
+A comprehensive trial management and automation system that helps users maximize value from digital subscriptions.
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/yourusername/Trial-junkies-.git
-    ```
-2. Navigate to the project directory:
-    ```sh
-    cd Trial-junkies-
-    ```
-3. Install dependencies:
-    ```sh
-    npm install
-    ```
+## Value Proposition
 
-### Configuration
+### Cost Savings Analysis
+- Adobe Creative Suite ($59.99/month) = $719.88/year
+- Canva Pro ($12.99/month) = $155.88/year
+- Spotify Premium ($9.99/month) = $119.88/year
+- Netflix Premium ($19.99/month) = $239.88/year
+- Disney+ ($7.99/month) = $95.88/year
 
-Before running the application, you may need to configure some settings. Create a `.env` file in the root directory and add the necessary environment variables. For example:
-```sh
-API_KEY=your_api_key_here
-DATABASE_URL=your_database_url_here
-```
+**Potential Annual Savings: $1,331.40**
 
-## Environment Variables
+Our system helps you manage trials efficiently while staying compliant with service terms.
 
-The following environment variables need to be set in the `.env` file:
+## Discord Bot Commands
 
-- `RAPIDAPI_KEY`: Your RapidAPI key.
-- `WALLET_KEYPAIR`: Your wallet keypair.
-- `SOLANA_ENDPOINT`: The Solana endpoint URL.
-- `DISCORD_BOT_TOKEN`: Your Discord bot token.
-- `GEMINI_API_KEY`: Your Gemini API key.
+- `!trial <platform>` - Request a new trial for specified platform
+- `!balance` - Check remaining trials in subscription
+- `!subscription` - View subscription status and details
+- `!help` - List all available commands
+- `!platforms` - Show supported platforms
 
-### Usage
+## Development Roadmap
 
-To start the application, run:
-```sh
-npm start
-```
+### Phase 1: Core Infrastructure
+- [x] Project setup
+- [x] Basic Discord bot implementation
+- [ ] Solana payment integration
+- [ ] Subscription management system
 
-### Using the Bot
+### Phase 2: Trial Management
+- [ ] Trial request workflow
+- [ ] Form filling automation
+- [ ] Profile generation
+- [ ] Credential management
 
-1. **Invite the Bot to Your Server**: Use the OAuth2 URL to invite the bot to your Discord server.
-2. **Bot Commands**: The bot supports the following commands:
-    - `!help`: Displays a list of available commands.
-    - `!balance`: Shows the current balance of the wallet.
-    - `!price [symbol]`: Fetches the current price of the specified cryptocurrency.
-    - `!transfer [amount] [address]`: Transfers the specified amount to the given address.
+### Phase 3: Advanced Features
+- [ ] Multi-platform support
+- [ ] Advanced scraping capabilities
+- [ ] AI-powered form detection
+- [ ] Automated verification systems
 
-### Running Tests
+### Phase 4: Security & Optimization
+- [ ] Enhanced encryption
+- [ ] Rate limiting
+- [ ] Load balancing
+- [ ] Performance optimization
 
-To run tests, use:
-```sh
-npm test
-```
+## Next Steps Priority
 
-To run tests using Python, use:
-```sh
-python -m unittest discover -s tests
-```
+1. **Solana Payment System**
+   - Implement wallet creation
+   - Setup payment processing
+   - Add balance checking
+   - Transaction verification
 
-### Contributing
+2. **Trial Request Workflow**
+   - Platform detection
+   - Form analysis
+   - Request queueing
+   - Status tracking
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes.
-4. Commit your changes (`git commit -m 'Add some feature'`).
-5. Push to the branch (`git push origin feature-branch`).
-6. Open a pull request.
+3. **Credential Generation**
+   - Secure storage
+   - Random generation
+   - Validation system
+   - Rotation mechanism
 
-### License
+4. **Scraper Functionality**
+   - Headless browser integration
+   - Form detection
+   - Anti-detection measures
+   - Success verification
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Getting Started
+
+Check the installation section in CONTRIBUTING.md for setup instructions.
+
+## Security
+
+This project prioritizes security and compliance. Users are responsible for adhering to service terms and conditions.
