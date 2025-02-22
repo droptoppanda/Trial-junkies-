@@ -48,7 +48,7 @@ class SolanaPay:
             raise ValueError(f"Invalid keypair format: {str(e)}")
 
     def get_balance(self):
-        return self.client.get_balance(self.keypair.pubkey)
+        return self.client.get_balance(self.keypair.pubkey())
 
     def process_payment(self, amount):
         try:
@@ -83,14 +83,16 @@ class SolanaPay:
             if not blockhash_response or not blockhash_response.value:
                 raise ValueError("Failed to get recent blockhash")
                 
+            from_pubkey = self.keypair.pubkey()
+            to_pubkey = PublicKey.from_string(recipient)
             transfer_params = TransferParams(
-                from_pubkey=self.keypair.pubkey(),
-                to_pubkey=PublicKey.from_string(recipient),
+                from_pubkey=from_pubkey,
+                to_pubkey=to_pubkey,
                 lamports=amount
             )
             transfer_ix = transfer(transfer_params)
             message = Message([transfer_ix])
-            transaction = Transaction.new_with_payer([transfer_ix], self.keypair.pubkey())
+            transaction = Transaction.new_with_payer([transfer_ix], from_pubkey)
             transaction.sign([self.keypair], blockhash_response.value.blockhash)
             return transaction
         except Exception as e:
