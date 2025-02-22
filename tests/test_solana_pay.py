@@ -31,7 +31,8 @@ class TestSolanaPay(unittest.TestCase):
 
         # Mock blockhash
         mock_blockhash = MagicMock()
-        mock_blockhash.value.blockhash = bytes([0] * 32)
+        mock_blockhash.value = MagicMock()
+        mock_blockhash.value.blockhash = "TestBlockhash123"  # Use string instead of bytes
         mock_instance.get_latest_blockhash.return_value = mock_blockhash
 
         # Mock transaction
