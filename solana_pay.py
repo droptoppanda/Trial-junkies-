@@ -100,10 +100,10 @@ class SolanaPay:
     def verify_payment(self, transaction_id):
         try:
             response = self.client.get_confirmed_transaction(transaction_id)
-            if not response or 'result' not in response:
+            if not response or not response.value:
                 return False
 
-            result = response['result']
+            result = response.value
             if not result:
                 return False
 
