@@ -1,13 +1,12 @@
+
 import os
 import logging
 import base58
-from solders.rpc.api import Client
-from solders.transaction import Transaction
-from solders.message import Message
-from solders.system_program import TransferParams, transfer
-from solders.pubkey import Pubkey as PublicKey
-from solders.keypair import Keypair
-from solders.hash import Hash
+from solana.rpc.api import Client
+from solana.transaction import Transaction
+from solana.system_program import transfer, TransferParams
+from solana.keypair import Keypair
+from solana.publickey import PublicKey
 
 # Configure logging
 logging.basicConfig(
@@ -33,7 +32,7 @@ class SolanaPay:
 
             if isinstance(keypair_base58, str):
                 decoded = base58.b58decode(keypair_base58)[:32]
-                self.keypair = Keypair.from_bytes(decoded)
+                self.keypair = Keypair.from_seed(decoded)
             else:
                 self.keypair = Keypair()
 
@@ -42,7 +41,7 @@ class SolanaPay:
             raise ValueError(f"Invalid keypair format: {str(e)}")
 
     def get_balance(self):
-        return self.client.get_balance(self.keypair.pubkey())
+        return self.client.get_balance(self.keypair.public_key)
 
     def process_payment(self, amount):
         try:
@@ -55,7 +54,7 @@ class SolanaPay:
             if amount <= 0:
                 return False, "Invalid payment amount"
 
-            recipient = self.keypair.pubkey()
+            recipient = self.keypair.public_key
             transaction = self.create_payment(amount, str(recipient))
             response = self.client.send_transaction(transaction)
 
@@ -75,21 +74,15 @@ class SolanaPay:
         try:
             recent_blockhash = self.client.get_recent_blockhash()['result']['value']['blockhash']
             transfer_params = TransferParams(
-                from_pubkey=self.keypair.pubkey(),
-                to_pubkey=PublicKey.from_string(recipient),
+                from_pubkey=self.keypair.public_key,
+                to_pubkey=PublicKey(recipient),
                 lamports=amount
             )
             transfer_ix = transfer(transfer_params)
-            message = Message.new_with_blockhash(
-                [transfer_ix],
-                self.keypair.pubkey(),
-                Hash.from_string(recent_blockhash)
-            )
-            transaction = Transaction(
-                from_keypairs=[self.keypair],
-                message=message,
-                recent_blockhash=recent_blockhash
-            )
+            transaction = Transaction()
+            transaction.add(transfer_ix)
+            transaction.recent_blockhash = recent_blockhash
+            transaction.sign(self.keypair)
             return transaction
         except Exception as e:
             logger.error(f"Error creating payment: {str(e)}")
@@ -119,10 +112,9 @@ class SolanaPay:
     def create_transaction(self, payer: Keypair, receiver: Keypair, amount: float):
         try:
             recent_blockhash = self.client.get_recent_blockhash()["result"]["value"]["blockhash"]
-            transaction = Transaction(
-                recent_blockhash=recent_blockhash,
-                fee_payer=payer.pubkey()
-            )
+            transaction = Transaction()
+            transaction.recent_blockhash = recent_blockhash
+            transaction.fee_payer = payer.public_key
             return transaction
         except Exception as e:
             logger.error(f"Error creating transaction: {str(e)}")

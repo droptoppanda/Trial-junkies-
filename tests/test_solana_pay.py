@@ -2,54 +2,45 @@ import os
 import unittest
 from unittest.mock import patch, MagicMock
 from solana_pay import SolanaPay
-from solders.rpc.api import Client
-from solders.transaction import Transaction
-from solders.keypair import Keypair
-from solders.message import Message
-from solders.hash import Hash
-from solders.pubkey import Pubkey as PublicKey
+from solana.rpc.api import Client
+from solana.transaction import Transaction
+from solana.keypair import Keypair
+from solana.publickey import PublicKey
 
 class TestSolanaPay(unittest.TestCase):
     def setUp(self):
         os.environ['TESTING'] = 'true'
-        # Using a valid test keypair that's base58 encoded (32 bytes)
-        test_keypair = "4NMwxzFrpZQVX9sXZwSvSD8CX6WdZheQh7hXCFAEYQm"  # 32-byte keypair
+        test_keypair = "4NMwxzFrpZQVX9sXZwSvSD8CX6WdZheQh7hXCFAEYQm"
         self.solana_pay = SolanaPay("test_endpoint", test_keypair)
         del os.environ['TESTING']
 
     @patch('solana_pay.Client')
     def test_get_balance(self, mock_client):
-        # Configure the mock client instance
         mock_client_instance = mock_client.return_value
         mock_client_instance.get_balance.return_value = {
             "result": {"value": 1000000}
         }
-        
-        # Replace the test instance's client with our mock
+
         self.solana_pay.client = mock_client_instance
-        
+
         balance = self.solana_pay.get_balance()
         self.assertEqual(balance["result"]["value"], 1000000)
 
     @patch('solana_pay.Client')
     def test_process_payment(self, mock_client):
-        # Configure mock client instance
         mock_client_instance = mock_client.return_value
         mock_client_instance.get_balance.return_value = {
             "result": {"value": 1000000}
         }
-        
-        # Mock recent blockhash
+
         mock_client_instance.get_recent_blockhash.return_value = {
             "result": {"value": {"blockhash": "test_blockhash"}}
         }
-        
-        # Mock successful transaction send
+
         mock_client_instance.send_transaction.return_value = {
             "result": "test_signature"
         }
 
-        # Mock transaction confirmation
         mock_client_instance.get_confirmed_transaction.return_value = {
             "result": {
                 "meta": {"err": None},
@@ -57,39 +48,20 @@ class TestSolanaPay(unittest.TestCase):
                 "confirmations": 1
             }
         }
-        
-        # Set the mock client
+
         self.solana_pay.client = mock_client_instance
-        
-        # Test payment processing
+
         success, result = self.solana_pay.process_payment(100)
         self.assertTrue(success)
         self.assertEqual(result, "test_signature")
-        
 
-    #Additional test case from edited code.
     def test_transaction_creation(self):
         self.client = Client("https://api.devnet.solana.com")
         self.payer = Keypair()
         self.receiver = Keypair()
-        
-        # Get recent blockhash and create message
-        recent_blockhash = self.client.get_recent_blockhash()["result"]["value"]["blockhash"]
-        message = Message.new_with_blockhash(
-            instructions=[],
-            payer=self.payer.pubkey(),
-            recent_blockhash=recent_blockhash
-        )
 
-        # Create transaction with required parameters
-        transaction = Transaction(
-            from_keypairs=[self.payer],
-            message=message,
-            recent_blockhash=recent_blockhash
-        )
-
+        transaction = self.solana_pay.create_transaction(self.payer, self.receiver, 1000)
         self.assertIsNotNone(transaction)
-
 
 if __name__ == '__main__':
     unittest.main()
