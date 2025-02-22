@@ -118,9 +118,14 @@ class SolanaPay:
     def create_transaction(self, payer: Keypair, receiver: Keypair, amount: float):
         try:
             recent_blockhash = self.client.get_latest_blockhash().value.blockhash
-            transaction = Transaction()
-            transaction.recent_blockhash = recent_blockhash
-            transaction.fee_payer = payer.pubkey
+            transfer_params = TransferParams(
+                from_pubkey=payer.pubkey,
+                to_pubkey=receiver.pubkey,
+                lamports=amount
+            )
+            transfer_ix = transfer(transfer_params)
+            transaction = Transaction().add(transfer_ix)
+            transaction.sign([payer])
             return transaction
         except Exception as e:
             logger.error(f"Error creating transaction: {str(e)}")

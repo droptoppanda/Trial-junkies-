@@ -33,9 +33,9 @@ class TestSolanaPay(unittest.TestCase):
             "result": {"value": 1000000}
         }
 
-        mock_client_instance.get_latest_blockhash.return_value = {
-            "result": {"value": {"blockhash": "test_blockhash"}}
-        }
+        mock_response = MagicMock()
+        mock_response.value.blockhash = "test_blockhash"
+        mock_client_instance.get_latest_blockhash.return_value = mock_response
 
         mock_client_instance.send_transaction.return_value = {
             "result": "test_signature"
