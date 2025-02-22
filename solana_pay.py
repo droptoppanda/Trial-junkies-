@@ -97,9 +97,8 @@ class SolanaPay:
             )
             transfer_ix = transfer(transfer_params)
             recent_blockhash = blockhash_response.value.blockhash
-            message = Message([transfer_ix], recent_blockhash=recent_blockhash)
-            transaction = Transaction(message=message)
-            transaction.sign([self.keypair])
+            message = Message.new_with_blockhash([transfer_ix], self.keypair.pubkey(), recent_blockhash)
+            transaction = Transaction.new_from_message(message, [self.keypair])
             return transaction
         except Exception as e:
             logger.error(f"Error creating payment: {str(e)}")
