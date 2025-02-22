@@ -13,14 +13,13 @@ wallet_keypair: Optional[str] = None
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def install_dependencies():
-    packages = [
-        'asyncio', 'base58', 'discord-py', 'google-generativeai',
-        'python-dotenv', 'rapid-api-client', 'requests', 'selenium',
-        'solana', 'solders', 'web3', 'webdriver-manager'
-    ]
-    
     try:
-        package_list = ' '.join(packages)
+        subprocess.run(['upm', 'add', 'python-dotenv'], check=True)
+        packages = [
+            'asyncio', 'base58', 'discord-py', 'google-generativeai',
+            'rapid-api-client', 'requests', 'selenium',
+            'solana', 'solders', 'web3', 'webdriver-manager'
+        ]
         subprocess.run(['upm', 'add'] + packages, check=True)
         logging.info("Successfully installed all packages")
     except subprocess.CalledProcessError as e:
