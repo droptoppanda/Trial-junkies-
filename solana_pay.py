@@ -60,7 +60,7 @@ class SolanaPay:
             if amount <= 0:
                 return False, "Invalid payment amount"
 
-            recipient = self.keypair.public_key
+            recipient = self.keypair.pubkey
             transaction = self.create_payment(amount, str(recipient))
             response = self.client.send_transaction(transaction)
 
@@ -78,9 +78,9 @@ class SolanaPay:
 
     def create_payment(self, amount, recipient):
         try:
-            recent_blockhash = self.client.get_recent_blockhash()['result']['value']['blockhash']
+            recent_blockhash = self.client.get_latest_blockhash().value.blockhash
             transfer_params = TransferParams(
-                from_pubkey=self.keypair.public_key,
+                from_pubkey=self.keypair.pubkey,
                 to_pubkey=PublicKey(recipient),
                 lamports=amount
             )
@@ -117,10 +117,10 @@ class SolanaPay:
 
     def create_transaction(self, payer: Keypair, receiver: Keypair, amount: float):
         try:
-            recent_blockhash = self.client.get_latest_blockhash()["result"]["value"]["blockhash"]
+            recent_blockhash = self.client.get_latest_blockhash().value.blockhash
             transaction = Transaction()
             transaction.recent_blockhash = recent_blockhash
-            transaction.fee_payer = payer.public_key
+            transaction.fee_payer = payer.pubkey
             return transaction
         except Exception as e:
             logger.error(f"Error creating transaction: {str(e)}")
