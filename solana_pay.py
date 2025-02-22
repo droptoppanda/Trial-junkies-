@@ -90,15 +90,29 @@ class SolanaPay:
                 
             from_pubkey = self.keypair.pubkey()
             to_pubkey = PublicKey.from_string(recipient)
+            
+            # Create transfer instruction
             transfer_params = TransferParams(
                 from_pubkey=from_pubkey,
                 to_pubkey=to_pubkey,
                 lamports=amount
             )
             transfer_ix = transfer(transfer_params)
+            
+            # Get blockhash and create transaction
             recent_blockhash = blockhash_response.value.blockhash
-            message = Message.new_with_blockhash([transfer_ix], self.keypair.pubkey(), recent_blockhash)
-            transaction = Transaction.new_from_message(message, [self.keypair])
+            message = Message.new_with_blockhash(
+                instructions=[transfer_ix],
+                payer=from_pubkey,
+                recent_blockhash=recent_blockhash
+            )
+            
+            # Create and sign transaction
+            transaction = Transaction.new_from_message(
+                message=message,
+                payer_signer=self.keypair
+            )
+            
             return transaction
         except Exception as e:
             logger.error(f"Error creating payment: {str(e)}")
