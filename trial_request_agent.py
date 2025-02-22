@@ -1,5 +1,6 @@
 
 import logging
+import requests
 from solana_pay import SolanaPay
 from credential_generation_agent import CredentialGenerationAgent
 from profile_generation_agent import ProfileGenerationAgent

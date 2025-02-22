@@ -74,8 +74,12 @@ class SolanaPay:
             transaction = self.create_payment(amount, str(recipient))
             response = self.client.send_transaction(transaction)
 
-            if not response or not response.value:
+            if not response:
                 return False, "Transaction failed"
+            if not hasattr(response, 'value'):
+                return False, "Invalid response format"
+            if not response.value:
+                return False, "Empty transaction value"
 
             verification = self.verify_payment(response.value)
             if not verification:
