@@ -1,0 +1,39 @@
+esourceWarning: Enable tracemalloc to get the object allocation traceback
+ERROR:solana_pay:Error creating payment: String is the wrong size
+ERROR:solana_pay:Payment processing error: String is the wrong size
+FAIL
+test_transaction_creation (test_solana_pay.TestSolanaPay.test_transaction_creation) ... INFO:httpx:HTTP Request: POST https://api.devnet.solana.com "HTTP/1.1 200 OK"
+INFO:solana_pay:Initialized Solana client with endpoint: https://api.devnet.solana.com
+INFO:httpx:HTTP Request: POST https://api.devnet.solana.com "HTTP/1.1 200 OK"
+ok
+test_execute_trial (test_trial_execution_agent.TestTrialExecutionAgent.test_execute_trial) ... INFO:WDM:====== WebDriver manager ======
+INFO:WDM:Get LATEST chromedriver version for google-chrome
+INFO:WDM:About to download new driver from https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+INFO:WDM:Driver downloading response is 200
+INFO:WDM:Get LATEST chromedriver version for google-chrome
+INFO:WDM:Get LATEST chromedriver version for google-chrome
+INFO:WDM:Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/114.0.5735.90]
+/nix/store/nb21sc3npfc8gvazwnrjxpvb5d48jysx-python3-3.12.7/lib/python3.12/unittest/mock.py:769: ResourceWarning: unclosed <ssl.SSLSocket fd=3, family=2, type=1, proto=6, laddr=('172.31.128.18', 40104), raddr=('67.209.52.66', 443)>
+  def __setattr__(self, name, value):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+INFO:root:Executing trial signup for John Doe
+ok
+test_get_trial_info (test_trial_request_agent.TestTrialRequestAgent.test_get_trial_info) ... ok
+test_verify_email (test_verification_agent.TestVerificationAgent.test_verify_email) ... ok
+test_verify_phone (test_verification_agent.TestVerificationAgent.test_verify_phone) ... ok
+
+======================================================================
+FAIL: test_process_payment (test_solana_pay.TestSolanaPay.test_process_payment)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/nix/store/nb21sc3npfc8gvazwnrjxpvb5d48jysx-python3-3.12.7/lib/python3.12/unittest/mock.py", line 1395, in patched
+    return func(*newargs, **newkeywargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/tests/test_solana_pay.py", line 55, in test_process_payment
+    self.assertTrue(success)
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 20 tests in 3.052s
+
+FAILED (failures=1)
