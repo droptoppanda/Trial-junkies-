@@ -105,14 +105,10 @@ class SolanaPay:
             
             # Get blockhash and create transaction
             recent_blockhash = blockhash_response.value.blockhash
-            message = Message.new_with_blockhash(
-                instructions=[transfer_ix],
-                payer=from_pubkey,
-                recent_blockhash=recent_blockhash
-            )
-            
-            # Create and sign transaction with message
-            transaction = Transaction(message=message)
+            transaction = Transaction()
+            transaction.add(transfer_ix)
+            transaction.recent_blockhash = recent_blockhash
+            transaction.fee_payer = from_pubkey
             transaction.sign([self.keypair])
             
             return transaction
