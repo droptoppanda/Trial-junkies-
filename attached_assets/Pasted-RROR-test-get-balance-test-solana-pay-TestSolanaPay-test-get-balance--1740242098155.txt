@@ -1,0 +1,41 @@
+RROR: test_get_balance (test_solana_pay.TestSolanaPay.test_get_balance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/nix/store/nb21sc3npfc8gvazwnrjxpvb5d48jysx-python3-3.12.7/lib/python3.12/unittest/mock.py", line 1395, in patched
+    return func(*newargs, **newkeywargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/tests/test_solana_pay.py", line 26, in test_get_balance
+    balance = self.solana_pay.get_balance()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/solana_pay.py", line 50, in get_balance
+    return self.client.get_balance(self.keypair.public_key)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'solders.keypair.Keypair' object has no attribute 'public_key'
+
+======================================================================
+ERROR: test_transaction_creation (test_solana_pay.TestSolanaPay.test_transaction_creation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/workspace/tests/test_solana_pay.py", line 63, in test_transaction_creation
+    transaction = self.solana_pay.create_transaction(self.payer, self.receiver, 1000)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/solana_pay.py", line 120, in create_transaction
+    recent_blockhash = self.client.get_recent_blockhash()["result"]["value"]["blockhash"]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Client' object has no attribute 'get_recent_blockhash'. Did you mean: 'get_latest_blockhash'?
+
+======================================================================
+FAIL: test_process_payment (test_solana_pay.TestSolanaPay.test_process_payment)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/nix/store/nb21sc3npfc8gvazwnrjxpvb5d48jysx-python3-3.12.7/lib/python3.12/unittest/mock.py", line 1395, in patched
+    return func(*newargs, **newkeywargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/tests/test_solana_pay.py", line 55, in test_process_payment
+    self.assertTrue(success)
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 20 tests in 2.377s
+
+FAILED (failures=1, errors=2)
