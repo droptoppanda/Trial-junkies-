@@ -90,12 +90,8 @@ class SolanaPay:
             )
             transfer_ix = transfer(transfer_params)
             message = Message([transfer_ix])
-            transaction = Transaction.new_signed_with_payer(
-                instructions=[transfer_ix],
-                payer=self.keypair.pubkey(),
-                signers=[self.keypair],
-                recent_blockhash=blockhash_response.value.blockhash
-            )
+            transaction = Transaction.new_with_payer([transfer_ix], self.keypair.pubkey())
+            transaction.sign([self.keypair], blockhash_response.value.blockhash)
             return transaction
         except Exception as e:
             logger.error(f"Error creating payment: {str(e)}")
