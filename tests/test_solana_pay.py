@@ -33,7 +33,7 @@ class TestSolanaPay(unittest.TestCase):
             "result": {"value": 1000000}
         }
 
-        mock_client_instance.get_recent_blockhash.return_value = {
+        mock_client_instance.get_latest_blockhash.return_value = {
             "result": {"value": {"blockhash": "test_blockhash"}}
         }
 

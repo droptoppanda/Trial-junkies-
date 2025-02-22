@@ -47,7 +47,7 @@ class SolanaPay:
             raise ValueError(f"Invalid keypair format: {str(e)}")
 
     def get_balance(self):
-        return self.client.get_balance(self.keypair.public_key)
+        return self.client.get_balance(self.keypair.pubkey)
 
     def process_payment(self, amount):
         try:
@@ -117,7 +117,7 @@ class SolanaPay:
 
     def create_transaction(self, payer: Keypair, receiver: Keypair, amount: float):
         try:
-            recent_blockhash = self.client.get_recent_blockhash()["result"]["value"]["blockhash"]
+            recent_blockhash = self.client.get_latest_blockhash()["result"]["value"]["blockhash"]
             transaction = Transaction()
             transaction.recent_blockhash = recent_blockhash
             transaction.fee_payer = payer.public_key
