@@ -4,6 +4,7 @@ import logging
 import base58
 from solana.rpc.api import Client
 from solders.transaction import Transaction
+from solders.message import Message
 from solders.system_program import transfer, TransferParams
 from solders.keypair import Keypair
 from solders.pubkey import Pubkey as PublicKey
@@ -85,9 +86,12 @@ class SolanaPay:
                 "lamports": amount
             }
             transfer_ix = transfer(transfer_params)
-            transaction = Transaction()
-            transaction.add(transfer_ix)
-            transaction.sign(self.keypair)
+            message = Message([transfer_ix])
+            transaction = Transaction(
+                from_keypairs=[self.keypair],
+                message=message,
+                recent_blockhash=recent_blockhash
+            )
             return transaction
         except Exception as e:
             logger.error(f"Error creating payment: {str(e)}")
@@ -123,9 +127,12 @@ class SolanaPay:
                 "lamports": amount
             }
             transfer_ix = transfer(transfer_params)
-            transaction = Transaction()
-            transaction.add(transfer_ix)
-            transaction.sign(payer)
+            message = Message([transfer_ix])
+            transaction = Transaction(
+                from_keypairs=[payer],
+                message=message,
+                recent_blockhash=recent_blockhash
+            )
             return transaction
         except Exception as e:
             logger.error(f"Error creating transaction: {str(e)}")
