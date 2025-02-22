@@ -79,18 +79,22 @@ class SolanaPay:
 
     def create_payment(self, amount, recipient):
         try:
-            recent_blockhash = self.client.get_latest_blockhash().value.blockhash
-            transfer_params = {
-                "from_pubkey": self.keypair.pubkey(),
-                "to_pubkey": PublicKey.from_string(recipient),
-                "lamports": amount
-            }
+            blockhash_response = self.client.get_latest_blockhash()
+            if not blockhash_response or not blockhash_response.value:
+                raise ValueError("Failed to get recent blockhash")
+                
+            transfer_params = TransferParams(
+                from_pubkey=self.keypair.pubkey(),
+                to_pubkey=PublicKey.from_string(recipient),
+                lamports=amount
+            )
             transfer_ix = transfer(transfer_params)
             message = Message([transfer_ix])
-            transaction = Transaction(
-                from_keypairs=[self.keypair],
-                message=message,
-                recent_blockhash=recent_blockhash
+            transaction = Transaction.new_signed_with_payer(
+                instructions=[transfer_ix],
+                payer=self.keypair.pubkey(),
+                signers=[self.keypair],
+                recent_blockhash=blockhash_response.value.blockhash
             )
             return transaction
         except Exception as e:
